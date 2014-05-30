@@ -1,0 +1,238 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1.2.2 木構造再帰 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="1.2.3 増加の程度" href="1.2.3.html" />
+    <link rel="prev" title="1.2.1 線形再帰と反復" href="1.2.1.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="1.2.3.html" title="1.2.3 増加の程度"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1.2.1.html" title="1.2.1 線形再帰と反復"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>1.2.2 木構造再帰<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>計算でよくあるパターンの一つとして, <strong>木構造再帰</strong> (tree recursion) がある.
+ここでは木構造再帰の例として Fibonacchi 数を取り扱う. Fibonacchi 数の定義は次の通り.</p>
+<div class="math">
+\[\begin{split}\begin{eqnarray}
+  Fib(n) =
+  \left\{
+  \begin{array}{3}
+    0 &amp;   n = 0 \\
+    1 &amp;   n = 1 \\
+    Fib(n - 1) + Fib(n - 2) &amp;   その他
+  \end{array}
+  \right.
+\end{eqnarray}\end{split}\]</div>
+<p>これを再帰的手続きの定義へと翻訳する.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fib</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">(</span><span class="k">else </span><span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nf">fib</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">))</span>
+                 <span class="p">(</span><span class="nf">fib</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">2</span><span class="p">))))))</span>
+</pre></div>
+</div>
+<p>この計算パターンを考えたとき, <cite>(fib 5)</cite> を計算するには <cite>(fib 4)</cite> と <cite>(fib 3)</cite> を計算することが分かる. さらに <cite>(fib 4)</cite> を計算するためには <cite>(fib 3)</cite> と <cite>(fib 2)</cite> を計算する必要がある. 最終的には終端条件である <cite>n = 0</cite> , <cite>n = 1</cite> になるまで同様の計算を繰り返す. 手続き fib は呼び出される度に, 自分自身を二回呼び出すためプロセスは樹木状へと進化する.</p>
+<p>手続きの葉である <cite>(fib 1)</cite> や <cite>(fib 0)</cite> の演算回数が正確に <cite>Fib(n + 1)</cite> であるのを示すのは難しくありません. この方法の酷さを知るために <cite>Fib(n)</cite> の値が <cite>n</cite> に対して指数関数的に増加することを示すことが出来ます. <cite>Fib(n)</cite> は以下の条件の場合に <span class="math">\(\frac{\phi^n}{\sqrt5}\)</span> に最も近い整数となる.
+ただし,</p>
+<div class="math">
+\[\phi = \frac{(1+\sqrt5)}{2} \approx 1.6180\]</div>
+<p>は <strong>黄金比</strong> であり, 次の等式を満たします.</p>
+<div class="math">
+\[\phi^2 = \phi+1\]</div>
+<p>従ってプロセスは入力に伴い, 指数関数的に増加するステップ数を要することが分かる. 一方で要求される記憶域は入力に対して, 線形にしか増加しません. 一般的に, 木構造再帰プロセスで必要なステップ数は木構造のノードの数に比例し, 必要な記憶域は木構造の最大深さに比例する.</p>
+<p>Fibonacci 数の計算の反復的プロセスを形式化する場合, 二つの変数 <cite>a</cite>, <cite>b</cite> を <cite>Fib(1)=1, Fib(0)=0</cite> で初期化し,</p>
+<div class="math">
+\[\begin{split}\begin{array}{l}
+  a &amp; \leftarrow a + b\\
+  b &amp; \leftarrow a
+\end{array}\end{split}\]</div>
+<p>の同時の変換を繰り返すことによって表現する. 従って Fibonacci 数を反復的に以下の手続きを用いて計算することが可能です.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fib</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">fib-iter</span> <span class="mi">1</span> <span class="mi">0</span> <span class="nv">n</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fib-iter</span> <span class="nv">a</span> <span class="nv">b</span> <span class="nv">count</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">count</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="nv">b</span>
+      <span class="p">(</span><span class="nf">fib-iter</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="nv">a</span> <span class="p">(</span><span class="nb">- </span><span class="nv">count</span> <span class="mi">1</span><span class="p">))))</span>
+</pre></div>
+</div>
+<p>この <cite>Fib(n)</cite> を計算する二つ目の方法は線形反復です. 二つの方法により要求されるステップ数の差は入力が小さくても非常に大きくなります. だからといって木構造再帰プロセスが役に立たないというわけではなく, 階層構造のデータを操作するプロセスを考えた場合などは自然で強力なツールです.</p>
+<div class="section" id="id2">
+<h2>例: 両替の計算<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>次の問題を考える. 50 セント, 25 セント, 10 セント, 5 セント, 1セントがあるとして 1 ドルの両替にはどのくらいの場合があるか. つまり, 金額に対して両替の場合の数を計算する手続きは書けるか.</p>
+<p><cite>n</cite> 種類の硬貨を使う, 金額 <cite>a</cite> の両替の場合の数は</p>
+<ul class="simple">
+<li>最初の種類の硬貨以外を使う, 金額 <cite>a</cite> の両替の場合の数</li>
+<li><cite>d</cite> を最初の硬貨の額面金額 [denomination] として, <cite>n</cite> 種類の硬貨を使う, 金額 <cite>a-d</cite> の両替の場合の数</li>
+</ul>
+<p>この方法は両替が最初の硬貨を使わないのと, 使うのの二つのグループに分けることで問題を解決する. 少ない種類の硬貨を使う少ない金額の問題へ再帰的に縮小させることが出来る.</p>
+<ul class="simple">
+<li><cite>a</cite> がちょうど 0 なら, 両替の場合の数は 1</li>
+<li><cite>a</cite> が 0 より少なければ, 両替の場合の数は 0</li>
+<li><cite>n</cite> が 0 なら, 両替の場合の数は 0</li>
+</ul>
+<p>この記述を再帰的手続きへと翻訳する.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">count-change</span> <span class="nv">amount</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">cc</span> <span class="nv">amount</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">cc</span> <span class="nv">amount</span> <span class="nv">kinds-of-conins</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">cond</span>
+   <span class="p">((</span><span class="nb">zero? </span><span class="nv">amount</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+   <span class="p">((</span><span class="k">or </span><span class="p">(</span><span class="nb">&lt; </span><span class="nv">amount</span> <span class="mi">0</span><span class="p">)(</span><span class="nb">zero? </span><span class="nv">kinds-of-conins</span><span class="p">))</span> <span class="mi">0</span><span class="p">)</span>
+   <span class="p">(</span><span class="nf">else</span>
+    <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nf">cc</span> <span class="nv">amount</span> <span class="p">(</span><span class="nb">- </span><span class="nv">kinds-of-conins</span> <span class="mi">1</span><span class="p">))</span>
+       <span class="p">(</span><span class="nf">cc</span> <span class="p">(</span><span class="nb">- </span><span class="nv">amount</span> <span class="p">(</span><span class="nf">first-denomination</span> <span class="nv">kinds-of-conins</span><span class="p">))</span>
+        <span class="nv">kinds-of-conins</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">first-denomination</span> <span class="nv">kinds-of-conins</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">cond</span>
+   <span class="p">((</span><span class="nb">= </span><span class="nv">kinds-of-conins</span> <span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+   <span class="p">((</span><span class="nb">= </span><span class="nv">kinds-of-conins</span> <span class="mi">2</span><span class="p">)</span> <span class="mi">5</span><span class="p">)</span>
+   <span class="p">((</span><span class="nb">= </span><span class="nv">kinds-of-conins</span> <span class="mi">3</span><span class="p">)</span> <span class="mi">10</span><span class="p">)</span>
+   <span class="p">((</span><span class="nb">= </span><span class="nv">kinds-of-conins</span> <span class="mi">4</span><span class="p">)</span> <span class="mi">25</span><span class="p">)</span>
+   <span class="p">((</span><span class="nb">= </span><span class="nv">kinds-of-conins</span> <span class="mi">5</span><span class="p">)</span> <span class="mi">50</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>1 ドルの両替をつくる場合のプロセスの動きを調べるのに少し大きすぎるので, 10 セントの両替をつくる場合のプロセスの動きを確認する.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="nf">count-change</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nf">cc</span> <span class="mi">10</span> <span class="mi">5</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="p">(</span><span class="nf">cc</span> <span class="mi">-40</span> <span class="mi">5</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="mi">0</span>
+<span class="nv">|</span>
+<span class="p">(</span><span class="nf">cc</span> <span class="mi">10</span> <span class="mi">4</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="p">(</span><span class="nf">cc</span> <span class="mi">-15</span> <span class="mi">4</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="mi">0</span>
+<span class="nv">|</span>
+<span class="p">(</span><span class="nf">cc</span> <span class="mi">10</span> <span class="mi">3</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="p">(</span><span class="nf">cc</span> <span class="mi">0</span> <span class="mi">3</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="mi">1</span>
+<span class="nv">|</span>
+<span class="p">(</span><span class="nf">cc</span> <span class="mi">10</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="p">(</span><span class="nf">cc</span> <span class="mi">5</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="p">(</span><span class="nf">cc</span> <span class="mi">0</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="mi">1</span>
+<span class="nv">|</span>            <span class="nv">|</span>
+<span class="nv">|</span>            <span class="p">(</span><span class="nf">cc</span> <span class="mi">5</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="o">...</span> <span class="nv">-&gt;</span> <span class="p">(</span><span class="nf">cc</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="mi">1</span>
+<span class="nv">|</span>            <span class="nv">|</span>
+<span class="nv">|</span>            <span class="p">(</span><span class="nf">cc</span> <span class="mi">5</span> <span class="mi">0</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="mi">0</span>
+<span class="nv">|</span>
+<span class="p">(</span><span class="nf">cc</span> <span class="mi">10</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="o">...</span> <span class="nv">-&gt;</span> <span class="p">(</span><span class="nf">cc</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="mi">1</span>
+<span class="nv">|</span>
+<span class="p">(</span><span class="nf">cc</span> <span class="mi">10</span> <span class="mi">0</span><span class="p">)</span> <span class="nv">-&gt;</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>このように木構造的再帰プロセスを生成することが確認出来る. fib 関数と同様にステップ数が指数関数的に増えるが, この冗長な計算に対処する一つの方法は <strong>メモ化 (memoization)</strong> として知られている.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1.2.2 木構造再帰</a><ul>
+<li><a class="reference internal" href="#id2">例: 両替の計算</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="1.2.1.html"
+                        title="previous chapter">1.2.1 線形再帰と反復</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="1.2.3.html"
+                        title="next chapter">1.2.3 増加の程度</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="1.2.3.html" title="1.2.3 増加の程度"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1.2.1.html" title="1.2.1 線形再帰と反復"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

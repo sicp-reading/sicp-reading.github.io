@@ -1,0 +1,180 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exercise 1.9 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="Exercise 1.10" href="ex1.10.html" />
+    <link rel="prev" title="Exercise 1.8" href="ex1.08.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ex1.10.html" title="Exercise 1.10"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ex1.08.html" title="Exercise 1.8"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exercise-1-9">
+<h1>Exercise 1.9<a class="headerlink" href="#exercise-1-9" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">inc</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">+ </span><span class="nv">n</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">dec</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">+ をそのまま定義しなおすと inc と dec の定義で使っている + と被り</div>
+</div>
+<p>循環参照してしまうので, ここでは + の代わりに plus 関数を定義する.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">plus</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">a</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="nv">b</span>
+      <span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">plus</span> <span class="p">(</span><span class="nf">dec</span> <span class="nv">a</span><span class="p">)</span> <span class="nv">b</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nf">plus</span> <span class="mi">4</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="c1">;; 評価の様子</span>
+<span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">plus</span> <span class="mi">3</span> <span class="mi">5</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">plus</span> <span class="mi">2</span> <span class="mi">5</span><span class="p">)))</span>
+<span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">plus</span> <span class="mi">1</span> <span class="mi">5</span><span class="p">))))</span>
+<span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">plus</span> <span class="mi">0</span> <span class="mi">5</span><span class="p">)))))</span>
+<span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">inc</span> <span class="mi">5</span><span class="p">))))</span>
+<span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">inc</span> <span class="mi">6</span><span class="p">)))</span>
+<span class="p">(</span><span class="nf">inc</span> <span class="p">(</span><span class="nf">inc</span> <span class="mi">7</span><span class="p">))</span>
+<span class="p">(</span><span class="nf">inc</span> <span class="mi">8</span><span class="p">)</span>
+<span class="mi">9</span>
+</pre></div>
+</div>
+<p>遅延演算の列を成していて, 線形に膨張と収縮をしているため, 再帰的プロセスである.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">plus</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">a</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="nv">b</span>
+      <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nf">dec</span> <span class="nv">a</span><span class="p">)</span> <span class="p">(</span><span class="nf">inc</span> <span class="nv">b</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nf">plus</span> <span class="mi">4</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="c1">;; 評価の様子</span>
+<span class="p">(</span><span class="nf">plus</span> <span class="mi">3</span> <span class="mi">6</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">plus</span> <span class="mi">2</span> <span class="mi">7</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">plus</span> <span class="mi">1</span> <span class="mi">8</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">plus</span> <span class="mi">0</span> <span class="mi">9</span><span class="p">)</span>
+<span class="mi">9</span>
+</pre></div>
+</div>
+<p>プロセスが伸縮せずに常にどの段階からでも計算を再開できるので, 反復的プロセスである.</p>
+<p>また SLIB ライブラリを使用することによって, どのような引数でどういう順序でよばれたかトレースできる.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="nf">use</span> <span class="nv">slib</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">require</span> <span class="ss">&#39;trace</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nf">trace</span> <span class="nv">plus</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">plus</span> <span class="mi">4</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex1.08.html"
+                        title="previous chapter">Exercise 1.8</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex1.10.html"
+                        title="next chapter">Exercise 1.10</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ex1.10.html" title="Exercise 1.10"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ex1.08.html" title="Exercise 1.8"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

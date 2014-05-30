@@ -1,0 +1,217 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exercise 1.37 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="Exercise 1.38" href="ex1.38.html" />
+    <link rel="prev" title="Exercise 1.36" href="ex1.36.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ex1.38.html" title="Exercise 1.38"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ex1.36.html" title="Exercise 1.36"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exercise-1-37">
+<h1>Exercise 1.37<a class="headerlink" href="#exercise-1-37" title="Permalink to this headline">¶</a></h1>
+<p>無限の連分数の一般項は 第 k 項において以下のように表せる.</p>
+<p><span class="math">\(f(N_{i}, D_{i}) = \frac{N_i}{D_{i} + f(N_{i+1}, D_{i+1})}\)</span></p>
+<p>これを再帰的プロセスまたは反復的プロセスを使って S 式に書き換えたものが解となる.</p>
+<div class="section" id="id1">
+<h2>解答<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="c1">;; 再帰的プロセス</span>
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">cont-franc</span> <span class="nv">n</span> <span class="nv">d</span> <span class="nv">k</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">cont-franc-iter</span> <span class="nv">i</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">k</span> <span class="nv">i</span><span class="p">)</span>
+        <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nf">n</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nf">d</span> <span class="nv">i</span><span class="p">))</span>
+        <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nf">n</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nf">d</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nf">cont-franc-iter</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">i</span> <span class="mi">1</span><span class="p">))))))</span>
+  <span class="p">(</span><span class="nf">cont-franc-iter</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="c1">;; 反復的プロセス</span>
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">cont-franc</span> <span class="nv">n</span> <span class="nv">d</span> <span class="nv">k</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">cont-franc-iter</span> <span class="nv">i</span> <span class="nv">sum</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">k</span> <span class="nv">i</span><span class="p">)</span>
+        <span class="nv">sum</span>
+        <span class="p">(</span><span class="nf">cont-franc-iter</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">i</span> <span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nf">n</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nf">d</span> <span class="nv">i</span><span class="p">)</span> <span class="nv">sum</span><span class="p">)))))</span>
+  <span class="p">(</span><span class="nf">cont-franc-iter</span> <span class="mi">1</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="c1">;; 1/phi を求める手続き</span>
+<span class="p">(</span><span class="nf">cont-franc</span>
+  <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">i</span><span class="p">)</span> <span class="mf">1.0</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">i</span><span class="p">)</span> <span class="mf">1.0</span><span class="p">)</span>
+  <span class="nv">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>実行コード<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>また, <span class="math">\(\frac{1}{\phi }\)</span> を求める手続きを使って, 4 桁の精度の近似を得る為には k はどのくらい大きくしなければならないかを調べる. 1 ~ 30 までの k に対して計算した結果を下に示す.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">test</span> <span class="nv">f</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">map</span>
+    <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">i</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb">display </span><span class="nv">i</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb">display </span><span class="s">&quot; : &quot;</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb">display </span><span class="p">(</span><span class="nf">f</span> <span class="nv">i</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nf">iota</span> <span class="nv">n</span> <span class="mi">1</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nf">test</span>
+  <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">k</span><span class="p">)</span>
+    <span class="p">(</span><span class="nf">cont-franc</span>
+      <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">i</span><span class="p">)</span> <span class="mf">1.0</span><span class="p">)</span>
+      <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">i</span><span class="p">)</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="nv">k</span><span class="p">))</span>
+   <span class="mi">20</span><span class="p">)</span>
+
+<span class="c1">;;  1 : 1.0</span>
+<span class="c1">;;  2 : 0.5</span>
+<span class="c1">;;  3 : 0.6666666666666666</span>
+<span class="c1">;;  4 : 0.6000000000000001</span>
+<span class="c1">;;  5 : 0.625</span>
+<span class="c1">;;  6 : 0.6153846153846154</span>
+<span class="c1">;;  7 : 0.6190476190476191</span>
+<span class="c1">;;  8 : 0.6176470588235294</span>
+<span class="c1">;;  9 : 0.6181818181818182</span>
+<span class="c1">;; 10 : 0.6179775280898876</span>
+<span class="c1">;; 11 : 0.6180555555555556</span>
+<span class="c1">;; 12 : 0.6180257510729613</span>
+<span class="c1">;; 13 : 0.6180371352785146</span>
+<span class="c1">;; 14 : 0.6180327868852459</span>
+<span class="c1">;; 15 : 0.6180344478216819</span>
+<span class="c1">;; 16 : 0.6180338134001252</span>
+<span class="c1">;; 17 : 0.6180340557275542</span>
+<span class="c1">;; 18 : 0.6180339631667064</span>
+<span class="c1">;; 19 : 0.6180339985218034</span>
+<span class="c1">;; 20 : 0.6180339850173578</span>
+<span class="c1">;; 21 : 0.6180339850173578</span>
+<span class="c1">;; 22 : 0.6180339901755971</span>
+<span class="c1">;; 23 : 0.6180339882053251</span>
+<span class="c1">;; 24 : 0.618033988957902</span>
+<span class="c1">;; 25 : 0.6180339886704432</span>
+<span class="c1">;; 26 : 0.6180339887802426</span>
+<span class="c1">;; 27 : 0.6180339887383031</span>
+<span class="c1">;; 28 : 0.6180339887543225</span>
+<span class="c1">;; 29 : 0.6180339887482037</span>
+<span class="c1">;; 30 : 0.6180339887505407</span>
+</pre></div>
+</div>
+<p>結果から, <span class="math">\(\frac{1}{\phi }\)</span> の 4 桁の精度の近似を得る為には k は 11 以上である必要があると分かる.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Exercise 1.37</a><ul>
+<li><a class="reference internal" href="#id1">解答</a></li>
+<li><a class="reference internal" href="#id2">実行コード</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex1.36.html"
+                        title="previous chapter">Exercise 1.36</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex1.38.html"
+                        title="next chapter">Exercise 1.38</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ex1.38.html" title="Exercise 1.38"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ex1.36.html" title="Exercise 1.36"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

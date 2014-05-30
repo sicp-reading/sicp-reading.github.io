@@ -1,0 +1,169 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1.1.6 条件式と述語 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="1.1.7 例: Newton 法による平方根" href="1.1.7.html" />
+    <link rel="prev" title="1.1.5 手続き作用の置き換えモデル" href="1.1.5.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="1.1.7.html" title="1.1.7 例: Newton 法による平方根"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1.1.5.html" title="1.1.5 手続き作用の置き換えモデル"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>1.1.6 条件式と述語<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="case-analysis">
+<h2>場合分け (case analysis)<a class="headerlink" href="#case-analysis" title="Permalink to this headline">¶</a></h2>
+<p>規則に従って手続きを定義する構文を場合分けと呼ぶ.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nb">abs </span><span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">&gt; </span><span class="nv">x</span> <span class="mi">0</span><span class="p">)</span> <span class="nv">x</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">= </span><span class="nv">x</span> <span class="mi">0</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">&lt; </span><span class="nv">x</span> <span class="mi">0</span><span class="p">)</span> <span class="p">(</span><span class="nb">- </span><span class="nv">x</span><span class="p">))))</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>条件式<ul>
+<li>述語を使って式の場合分けを担う構文をと呼ぶ.</li>
+</ul>
+</li>
+<li>述語<ul>
+<li>式の値が真 (#t) か偽 (#f) を解釈する式であり値を真か偽と解釈する式.</li>
+</ul>
+</li>
+<li>cond 式<ul>
+<li>特殊形式. 順に述語を評価し, 真ならば対応する式を評価する. 偽ならばその対応する式は評価せず次の述語の評価に進む.</li>
+</ul>
+</li>
+<li>if 式<ul>
+<li>特殊形式. まず述語を評価し, 真ならば帰結部 (consequent) と, 偽ならば代替部 (alternative) を評価する.</li>
+</ul>
+</li>
+<li>and, or 式<ul>
+<li>特殊形式. and は和集合を, or は積集合を評価する.</li>
+</ul>
+</li>
+<li>not 式<ul>
+<li>特殊形式. 引数の値が偽ならば #f と評価し, それ以外は全て #t と評価する.</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1.1.6 条件式と述語</a><ul>
+<li><a class="reference internal" href="#case-analysis">場合分け (case analysis)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="1.1.5.html"
+                        title="previous chapter">1.1.5 手続き作用の置き換えモデル</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="1.1.7.html"
+                        title="next chapter">1.1.7 例: Newton 法による平方根</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="1.1.7.html" title="1.1.7 例: Newton 法による平方根"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1.1.5.html" title="1.1.5 手続き作用の置き換えモデル"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,129 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1.2.3 増加の程度 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="1.2.4 べき乗" href="1.2.4.html" />
+    <link rel="prev" title="1.2.2 木構造再帰" href="1.2.2.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="1.2.4.html" title="1.2.4 べき乗"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1.2.2.html" title="1.2.2 木構造再帰"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>1.2.3 増加の程度<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>計算の資源 (メモリなど) を消費する速度は, プロセスによって大いに違う. この違いを記述する便利な方法の一つは, プロセスが入力が大きくなるにつれて必要とする資源を, 粗く見積もる <strong>増加の程度 (order of growth)</strong> の考えを使うことである.</p>
+<p><span class="math">\(n\)</span> を問題の大きさを表すパラメタ, <span class="math">\(R(n)\)</span> を大きさ <span class="math">\(n\)</span> の問題に対してプロセスが必要とする資源の量とする．前の例で言えば, <span class="math">\(n\)</span> をそれに対して関数を計算しようとする数にしたが, 別のものにする可能性もある.</p>
+<p>もし任意の十分に大きな <span class="math">\(n\)</span> の値に対して, 整数 <span class="math">\(k_1\)</span> と <span class="math">\(k_2\)</span> が <span class="math">\(n\)</span> に独立して存在し <span class="math">\(k_1f(n) \leq R(n) \leq k_2f(n)\)</span> を満たすとき, <span class="math">\(R(n)\)</span> は増加の次数 <span class="math">\(\Theta(f(n))\)</span> を持ち <span class="math">\(R(n) = \Theta(f(n))\)</span> と記述できる. 階乗計算の線形再帰的プロセスのステップ数は, 入力 <cite>n</cite> に比例して増加する. 従ってこのプロセスの必要とするステップ数は <span class="math">\(\Theta(n)\)</span> で増加する. また, 必要な記憶域も <span class="math">\(\Theta(n)\)</span> で増加した. 反復的階乗では, ステップ数はやはり <span class="math">\(\Theta(n)\)</span> だが, 記憶域は <span class="math">\(\Theta(1)\)</span>, つまり定数となる. 木構造の Fibonacci 計算は <span class="math">\(\Theta(\phi^n)\)</span> ステップと, <span class="math">\(\Theta(n)\)</span> の記憶域を必要とする.</p>
+<p>増加の次数はプロセスの行いについて概観的な説明を与える. 例えば <span class="math">\(n^2\)</span> ステップ, <span class="math">\(1000n^2\)</span> ステップ, <span class="math">\(3n^2+10n+17\)</span> ステップを必要とするプロセスは全て増加の次数は <span class="math">\(\Theta(n^2)\)</span> になる. 一方で増加の次数は問題のサイズを変更した場合にどの程度プロセスの挙動が変化するかを推測するのに実用的な指標です. <span class="math">\(\Theta(n)\)</span> の線形プロセスに対しサイズを 2 倍にした場合, 概ね 2 倍のリソースを使用します. 指数関数的プロセスに対しては問題サイズを 1 増やす度, 定数因子をリソース使用率にかけることになります.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="1.2.2.html"
+                        title="previous chapter">1.2.2 木構造再帰</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="1.2.4.html"
+                        title="next chapter">1.2.4 べき乗</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="1.2.4.html" title="1.2.4 べき乗"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1.2.2.html" title="1.2.2 木構造再帰"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

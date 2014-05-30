@@ -1,0 +1,171 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1.1.7 例: Newton 法による平方根 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="1.1.8 ブラックボックス抽象としての手続き" href="1.1.8.html" />
+    <link rel="prev" title="1.1.6 条件式と述語" href="1.1.6.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="1.1.8.html" title="1.1.8 ブラックボックス抽象としての手続き"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1.1.6.html" title="1.1.6 条件式と述語"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="newton">
+<h1>1.1.7 例: Newton 法による平方根<a class="headerlink" href="#newton" title="Permalink to this headline">¶</a></h1>
+<p>原文では <cite>x</cite> と <cite>y</cite> で説明がなされているが, 私たちは学校教育で <cite>x</cite> は変数で <cite>a</cite> が定数と慣らされているので, ここでは文字を変えて説明していることに留意いただきたい.</p>
+<p>平方根の関数は <span class="math">\(\sqrt{\mathstrut a} = x \geq 0 かつ x^2 = a\)</span> であるような <cite>x</cite> と定義できる.
+しかしこの定義に沿って Lisp に書き起こしても平方根の問題は解けない.
+なぜならこの定義は手続きではないからである.</p>
+<p>数学では <strong>それが何であるか</strong> を記述する, 一方計算機科学では <strong>それをどうするか</strong> を記述する.
+手続きでは <strong>それをどうするか</strong> を記述しなければ問題の解とならない.
+計算機科学では一般的に <strong>アルゴリズム</strong> と呼ばれる繰り返し処理を記述することによって問題を解く.</p>
+<p>さて平方根を解くという問題はどうやって解決するのだろうか？平方根を解くための有力な手法は Newton 法である.
+Newton 法では数 <cite>a</cite> の平方根の値の予測値を <cite>x</cite> としたとき, <cite>x</cite> と <span class="math">\(a/x\)</span> の平均値をとるという計算で真値に近い次の予測値を得られる.</p>
+<p>ではなぜこのアルゴリズムで平方根が得られるのか説明しよう.</p>
+<p><span class="math">\(y = x^2 - 2\)</span> を例に以下の手順を取る. (グラフを参照)</p>
+<img alt="../../_images/newton's_method.png" src="../../_images/newton's_method.png" />
+<div class="line-block">
+<div class="line"><span class="math">\(f(x) = x^2 - 2\)</span> とする</div>
+<div class="line"><span class="math">\(x = x_n\)</span> における f(x) の接線の方程式 g(x) を求める</div>
+<div class="line">g(x) = 0 の点 <span class="math">\(x_{n+1}\)</span> を求める</div>
+<div class="line"><span class="math">\(x_n\)</span> と <span class="math">\(x_{n+1}\)</span> に関する漸化式を導出する</div>
+</div>
+<div class="line-block">
+<div class="line">接線の方程式は g(x) - f(x_n) = f&#8217;(x_n)(x - x_n) なので</div>
+<div class="line"><span class="math">\(g(x) - (x_n^2 -2) = 2x_n(x - x_n)\)</span></div>
+<div class="line"><span class="math">\(g(x) = 2x_n x - x_n^2 - 2\)</span></div>
+<div class="line"><span class="math">\(0 = 2x_n x_{n+1} - x_n^2 - 2\)</span></div>
+<div class="line"><span class="math">\(x_{n+1} = \frac{1}{2} (x_n + \frac{2}{x_n})\)</span></div>
+</div>
+<p>以上により次の予測値を得るには <span class="math">\(x\)</span> と <span class="math">\(a/x\)</span> の平均値をとるという計算によって得られることが分かった.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">sqrt-iter</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">good-enough?</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span>
+      <span class="nv">guess</span>
+      <span class="p">(</span><span class="nf">sqrt-iter</span> <span class="p">(</span><span class="nf">improve</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span>
+                 <span class="nv">x</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">improve</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">average</span> <span class="nv">guess</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">x</span> <span class="nv">guess</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">average</span> <span class="nv">x</span> <span class="nv">y</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">y</span><span class="p">)</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">good-enough?</span> <span class="nv">guess</span> <span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">abs </span><span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="nf">square</span> <span class="nv">guess</span><span class="p">)</span> <span class="nv">x</span><span class="p">))</span> <span class="mf">0.001</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>sqrt のプログラムは単純な手続きで数値計算を行うことができる.
+さらにはここではプログラミングにおいてループ構文と呼ばれる構文は使っていないことも驚きである.
+sqrt-iter は通常の手続き呼び出しがあれば特別な構文なしで反復を実行することができる.
+(反復により効率が気になるところであるが 1.2.1 節の末尾再帰でその説明がなされる.)</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="1.1.6.html"
+                        title="previous chapter">1.1.6 条件式と述語</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="1.1.8.html"
+                        title="next chapter">1.1.8 ブラックボックス抽象としての手続き</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="1.1.8.html" title="1.1.8 ブラックボックス抽象としての手続き"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1.1.6.html" title="1.1.6 条件式と述語"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

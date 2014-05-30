@@ -1,0 +1,204 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exercise 1.16 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="Exercise 1.17" href="ex1.17.html" />
+    <link rel="prev" title="Exercise 1.15" href="ex1.15.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ex1.17.html" title="Exercise 1.17"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ex1.15.html" title="Exercise 1.15"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exercise-1-16">
+<h1>Exercise 1.16<a class="headerlink" href="#exercise-1-16" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>解法<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>逐次平方を使い, 累乗を求める式を考える.</p>
+<p><span class="math">\(b^n\)</span> において,</p>
+<ul class="simple">
+<li>n = 0 の時, <span class="math">\(b^0 = 1\)</span></li>
+<li>n が偶数の時, <span class="math">\((b^n/2) * (b^n/2) = b^n\)</span></li>
+<li>n が奇数の時, <span class="math">\(b * b^{n-1} = b^n\)</span></li>
+</ul>
+<p>を以下の fast-expt として定義する.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fast-expt</span> <span class="nv">b</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">even? </span><span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nf">square</span> <span class="p">(</span><span class="nf">fast-expt</span> <span class="nv">b</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">n</span> <span class="mi">2</span><span class="p">))))</span>
+        <span class="p">(</span><span class="k">else </span><span class="p">(</span><span class="nb">* </span><span class="nv">b</span> <span class="p">(</span><span class="nf">fast-expt</span> <span class="nv">b</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">))))))</span>
+</pre></div>
+</div>
+<p>同様に逐次平方を用いて対数的ステップ数の反復的べき乗プロセスを生成する手続きを考える. ヒントを参考に, 指数 n と底 b の他にもう一つの状態変数 a を用意し計算のステップ数を少なくさせることができる.</p>
+<p><span class="math">\(a * b^n\)</span> において以下のように考える.</p>
+<ul class="simple">
+<li>n = 0 の時, <span class="math">\(a * b^0 = 1\)</span></li>
+<li>n が偶数の時, <span class="math">\(a * (b^2)^{n/2} = a * b^n\)</span></li>
+<li>n が奇数の時, <span class="math">\(ab * b^{n-1} = a * b^n\)</span></li>
+</ul>
+<p>この式を S 式に置き換える.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fast-expt-iter</span> <span class="nv">a</span> <span class="nv">b</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">even? </span><span class="nv">n</span><span class="p">)</span>
+          <span class="p">(</span><span class="nf">fast-expt-iter</span> <span class="nv">a</span> <span class="p">(</span><span class="nf">square</span> <span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">n</span> <span class="mi">2</span><span class="p">)))</span>
+        <span class="p">(</span><span class="nf">else</span>
+          <span class="p">(</span><span class="nf">fast-expt-iter</span> <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="nv">b</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fast-expt</span> <span class="nv">b</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">fast-expt-iter</span> <span class="mi">1</span> <span class="nv">b</span> <span class="nv">n</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>実行コード<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">square</span> <span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">* </span><span class="nv">x</span> <span class="nv">x</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fast-expt-iter</span> <span class="nv">a</span> <span class="nv">b</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span> <span class="nv">a</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">even? </span><span class="nv">n</span><span class="p">)</span>
+          <span class="p">(</span><span class="nf">fast-expt-iter</span> <span class="nv">a</span> <span class="p">(</span><span class="nf">square</span> <span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">n</span> <span class="mi">2</span><span class="p">)))</span>
+        <span class="p">(</span><span class="nf">else</span>
+          <span class="p">(</span><span class="nf">fast-expt-iter</span> <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="nv">b</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fast-expt</span> <span class="nv">b</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">fast-expt-iter</span> <span class="mi">1</span> <span class="nv">b</span> <span class="nv">n</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">fast-expt</span> <span class="mi">2</span> <span class="mi">8</span><span class="p">)</span>
+<span class="c1">;; =&gt; 256</span>
+</pre></div>
+</div>
+<p>また, この例であげた (fast-expt 2 8) の計算ステップは以下のようになる.</p>
+<ul class="simple">
+<li>(fast-expt 2 8)</li>
+<li>(fast-expt-iter 1 2 8)</li>
+<li>(fast-expt-iter 1 (square 2) (/ 8 2))</li>
+<li>(fast-expt-iter 1 4 4)</li>
+<li>(fast-expt-iter 1 (square 4) (/ 4 2))</li>
+<li>(fast-expt-iter 1 16 2)</li>
+<li>(fast-expt-iter 1 (square 16) (/ 2 2))</li>
+<li>(fast-expt-iter 1 256 1)</li>
+<li>(fast-expt-iter (* 1 256) 256 (- 1 1)))</li>
+<li>(fast-expt-iter 256 256 0))</li>
+<li>256</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Exercise 1.16</a><ul>
+<li><a class="reference internal" href="#id1">解法</a></li>
+<li><a class="reference internal" href="#id2">実行コード</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex1.15.html"
+                        title="previous chapter">Exercise 1.15</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex1.17.html"
+                        title="next chapter">Exercise 1.17</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ex1.17.html" title="Exercise 1.17"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ex1.15.html" title="Exercise 1.15"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

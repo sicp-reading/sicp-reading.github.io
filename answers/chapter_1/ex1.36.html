@@ -1,0 +1,261 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exercise 1.36 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="Exercise 1.37" href="ex1.37.html" />
+    <link rel="prev" title="Exercise 1.35" href="ex1.35.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ex1.37.html" title="Exercise 1.37"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ex1.35.html" title="Exercise 1.35"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exercise-1-36">
+<h1>Exercise 1.36<a class="headerlink" href="#exercise-1-36" title="Permalink to this headline">¶</a></h1>
+<p><span class="math">\(x \mapsto \frac{log 1000}{log x}\)</span> の不動点を探索する.</p>
+<div class="section" id="id1">
+<h2>解答<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h3>予測値を印字するよう書き換える<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fixed-point</span> <span class="nv">f</span> <span class="nv">first-guess</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">close-enough?</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">abs </span><span class="p">(</span><span class="nb">- </span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">))</span> <span class="nv">tolerance</span><span class="p">))</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">try</span> <span class="nv">guess</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">display </span><span class="nv">guess</span><span class="p">)</span>
+    <span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">next</span> <span class="p">(</span><span class="nf">f</span> <span class="nv">guess</span><span class="p">)))</span>
+      <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">close-enough?</span> <span class="nv">guess</span> <span class="nv">next</span><span class="p">)</span>
+          <span class="nv">next</span>
+          <span class="p">(</span><span class="nf">try</span> <span class="nv">next</span><span class="p">))))</span>
+  <span class="p">(</span><span class="nf">try</span> <span class="nv">first-guess</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>実行結果<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fixed-point</span> <span class="nv">f</span> <span class="nv">first-guess</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">close-enough?</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">abs </span><span class="p">(</span><span class="nb">- </span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">))</span> <span class="nv">tolerance</span><span class="p">))</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">try</span> <span class="nv">guess</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">display </span><span class="nv">guess</span><span class="p">)</span>
+    <span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">next</span> <span class="p">(</span><span class="nf">f</span> <span class="nv">guess</span><span class="p">)))</span>
+      <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">close-enough?</span> <span class="nv">guess</span> <span class="nv">next</span><span class="p">)</span>
+          <span class="nv">next</span>
+          <span class="p">(</span><span class="nf">try</span> <span class="nv">next</span><span class="p">))))</span>
+  <span class="p">(</span><span class="nf">try</span> <span class="nv">first-guess</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">close-enough?</span> <span class="nv">x</span> <span class="nv">y</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">abs </span><span class="p">(</span><span class="nb">- </span><span class="nv">x</span> <span class="nv">y</span><span class="p">))</span> <span class="mf">0.001</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="nv">tolerance</span> <span class="mf">0.00001</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">average</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">+ </span><span class="nv">a</span> <span class="nv">b</span><span class="p">)</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="c1">;; 平均緩和法を未使用</span>
+<span class="p">(</span><span class="nf">fixed-point</span>
+  <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">log </span><span class="mi">1000</span><span class="p">)</span> <span class="p">(</span><span class="nb">log </span><span class="nv">x</span><span class="p">)))</span>
+  <span class="mf">1.5</span><span class="p">)</span>
+<span class="c1">;; 1.5</span>
+<span class="c1">;; 17.036620761802716</span>
+<span class="c1">;; 2.436284152826871</span>
+<span class="c1">;; 7.7573914048784065</span>
+<span class="c1">;; 3.3718636013068974</span>
+<span class="c1">;; 5.683217478018266</span>
+<span class="c1">;; 3.97564638093712</span>
+<span class="c1">;; 5.004940305230897</span>
+<span class="c1">;; 4.2893976408423535</span>
+<span class="c1">;; 4.743860707684508</span>
+<span class="c1">;; 4.437003894526853</span>
+<span class="c1">;; 4.6361416205906485</span>
+<span class="c1">;; 4.503444951269147</span>
+<span class="c1">;; 4.590350549476868</span>
+<span class="c1">;; 4.532777517802648</span>
+<span class="c1">;; 4.570631779772813</span>
+<span class="c1">;; 4.545618222336422</span>
+<span class="c1">;; 4.562092653795064</span>
+<span class="c1">;; 4.551218723744055</span>
+<span class="c1">;; 4.558385805707352</span>
+<span class="c1">;; 4.553657479516671</span>
+<span class="c1">;; 4.55677495241968</span>
+<span class="c1">;; 4.554718702465183</span>
+<span class="c1">;; 4.556074615314888</span>
+<span class="c1">;; 4.555180352768613</span>
+<span class="c1">;; 4.555770074687025</span>
+<span class="c1">;; 4.555381152108018</span>
+<span class="c1">;; 4.555637634081652</span>
+<span class="c1">;; 4.555468486740348</span>
+<span class="c1">;; 4.555580035270157</span>
+<span class="c1">;; 4.555506470667713</span>
+<span class="c1">;; 4.555554984963888</span>
+<span class="c1">;; 4.5555229906097905</span>
+<span class="c1">;; 4.555544090254035</span>
+<span class="c1">;; 4.555530175417048</span>
+<span class="c1">;; 4.555539351985717</span>
+
+<span class="c1">;; 平均緩和法を使用</span>
+<span class="p">(</span><span class="nf">fixed-point</span>
+  <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">x</span><span class="p">)</span> <span class="p">(</span><span class="nf">average</span> <span class="nv">x</span> <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">log </span><span class="mi">1000</span><span class="p">)</span> <span class="p">(</span><span class="nb">log </span><span class="nv">x</span><span class="p">))))</span>
+  <span class="mf">1.5</span><span class="p">)</span>
+<span class="c1">;; 1.5</span>
+<span class="c1">;; 9.268310380901358</span>
+<span class="c1">;; 6.185343522487719</span>
+<span class="c1">;; 4.988133688461795</span>
+<span class="c1">;; 4.643254620420954</span>
+<span class="c1">;; 4.571101497091747</span>
+<span class="c1">;; 4.5582061760763715</span>
+<span class="c1">;; 4.555990975858476</span>
+<span class="c1">;; 4.555613236666653</span>
+<span class="c1">;; 4.555548906156018</span>
+<span class="c1">;; 4.555537952796512</span>
+<span class="c1">;; 4.555536087870658</span>
+</pre></div>
+</div>
+<p>平均緩和法を使うことでステップ数を 35 回から 11 回に減らすことが出来た.</p>
+</div>
+<div class="section" id="id4">
+<h3>念のため確認<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="c1">;; 平均緩和法を未使用</span>
+<span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">log </span><span class="mi">1000</span><span class="p">)</span>
+   <span class="p">(</span><span class="nf">log</span>
+     <span class="p">(</span><span class="nf">fixed-point</span>
+       <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">log </span><span class="mi">1000</span><span class="p">)</span> <span class="p">(</span><span class="nb">log </span><span class="nv">x</span><span class="p">)))</span>
+       <span class="mf">1.5</span><span class="p">)))</span>
+<span class="c1">;; =&gt; 4.555533300207017</span>
+
+<span class="c1">;; 平均緩和法を未使用</span>
+<span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">log </span><span class="mi">1000</span><span class="p">)</span>
+   <span class="p">(</span><span class="nf">log</span>
+     <span class="p">(</span><span class="nf">fixed-point</span>
+       <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">x</span><span class="p">)</span> <span class="p">(</span><span class="nf">average</span> <span class="nv">x</span> <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">log </span><span class="mi">1000</span><span class="p">)</span> <span class="p">(</span><span class="nb">log </span><span class="nv">x</span><span class="p">))))</span>
+       <span class="mf">1.5</span><span class="p">)))</span>
+<span class="c1">;; =&gt; 4.555533300207017</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Exercise 1.36</a><ul>
+<li><a class="reference internal" href="#id1">解答</a><ul>
+<li><a class="reference internal" href="#id2">予測値を印字するよう書き換える</a></li>
+<li><a class="reference internal" href="#id3">実行結果</a></li>
+<li><a class="reference internal" href="#id4">念のため確認</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex1.35.html"
+                        title="previous chapter">Exercise 1.35</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex1.37.html"
+                        title="next chapter">Exercise 1.37</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ex1.37.html" title="Exercise 1.37"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ex1.35.html" title="Exercise 1.35"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

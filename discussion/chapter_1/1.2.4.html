@@ -1,0 +1,180 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1.2.4 べき乗 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="1.2.5 最大公約数" href="1.2.5.html" />
+    <link rel="prev" title="1.2.3 増加の程度" href="1.2.3.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="1.2.5.html" title="1.2.5 最大公約数"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1.2.3.html" title="1.2.3 増加の程度"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>1.2.4 べき乗<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>べき乗計算におけるプロセスを考える.</p>
+<div class="section" id="id2">
+<h2>線形再帰的プロセスのべき乗計算<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><span class="math">\(b^n = b * b^{n-1}\)</span></div>
+<div class="line"><span class="math">\(b^0 = 1\)</span></div>
+</div>
+<p>から以下の手続きに翻訳できる.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nb">expt </span><span class="nv">b</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+     <span class="mi">1</span>
+     <span class="p">(</span><span class="nb">* </span><span class="nv">b</span> <span class="p">(</span><span class="nb">expt </span><span class="nv">b</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">)))))</span>
+</pre></div>
+</div>
+<p>ステップ数は <span class="math">\(\Theta(n)\)</span>, スペースは <span class="math">\(\Theta(n)\)</span> を要する.</p>
+</div>
+<div class="section" id="id3">
+<h2>線形反復的プロセスのべき乗計算<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nb">expt </span><span class="nv">b</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">expt-iter</span> <span class="nv">b</span> <span class="nv">n</span> <span class="mi">1</span><span class="p">))</span>
+
+ <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">expt-iter</span> <span class="nv">b</span> <span class="nv">counter</span> <span class="nv">product</span><span class="p">)</span>
+   <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">counter</span> <span class="mi">0</span><span class="p">)</span>
+       <span class="nv">product</span>
+       <span class="p">(</span><span class="nb">* </span><span class="nv">b</span> <span class="nv">product</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>ステップ数は <span class="math">\(\Theta(n)\)</span>, スペースは <span class="math">\(\Theta(1)\)</span> を要する.</p>
+</div>
+<div class="section" id="id4">
+<h2>逐次平方を使ったべき乗計算<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><span class="math">\(b^n = (b^{n/2})^2\)</span> (n が偶数)</div>
+<div class="line"><span class="math">\(b^n = b * b^{n-1}\)</span> (n が奇数)</div>
+</div>
+<p>上の定義を用いて逐次平行を利用すると以下の手続きに翻訳できる.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fast-expt</span> <span class="nv">b</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">even? </span><span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nf">square</span> <span class="p">(</span><span class="nf">fast-expt</span> <span class="nv">b</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">n</span> <span class="mi">2</span><span class="p">))))</span>
+        <span class="p">(</span><span class="k">else </span><span class="p">(</span><span class="nb">* </span><span class="nv">b</span> <span class="p">(</span><span class="nf">fast-expt</span> <span class="nv">b</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">)))))))</span>
+</pre></div>
+</div>
+<p>ステップ数は <span class="math">\(\Theta(\log n)\)</span>, スペースは <span class="math">\(\Theta(\log n)\)</span> を要する.(<cite>log</cite> は 2 を底とする)</p>
+<p>逐次平方を使うことでより少ないステップでの計算が可能になる.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1.2.4 べき乗</a><ul>
+<li><a class="reference internal" href="#id2">線形再帰的プロセスのべき乗計算</a></li>
+<li><a class="reference internal" href="#id3">線形反復的プロセスのべき乗計算</a></li>
+<li><a class="reference internal" href="#id4">逐次平方を使ったべき乗計算</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="1.2.3.html"
+                        title="previous chapter">1.2.3 増加の程度</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="1.2.5.html"
+                        title="next chapter">1.2.5 最大公約数</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="1.2.5.html" title="1.2.5 最大公約数"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1.2.3.html" title="1.2.3 増加の程度"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

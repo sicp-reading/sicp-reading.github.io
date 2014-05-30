@@ -1,0 +1,202 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exercise 1.17 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="Exercise 1.18" href="ex1.18.html" />
+    <link rel="prev" title="Exercise 1.16" href="ex1.16.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ex1.18.html" title="Exercise 1.18"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ex1.16.html" title="Exercise 1.16"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exercise-1-17">
+<h1>Exercise 1.17<a class="headerlink" href="#exercise-1-17" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>問<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>乗算が無いと仮定する条件下において, <span class="math">\(a*b = a + a * (b - 1)\)</span> を考える.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">b</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="mi">0</span>
+      <span class="p">(</span><span class="nb">+ </span><span class="nv">a</span> <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="p">(</span><span class="nb">- </span><span class="nv">b</span> <span class="mi">1</span><span class="p">)))))</span>
+</pre></div>
+</div>
+<p>double 演算と halve 演算使い, fast-expt と類似の対数的ステップ数の乗算手続きを考える問題.</p>
+</div>
+<div class="section" id="id2">
+<h2>解法<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>まず前提として与えられた式を定義しておく.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">double</span> <span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">x</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">halve</span> <span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">x</span> <span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>与えられた以上の式を用いて乗算手続きを考えていく.</p>
+<p><span class="math">\(a*b\)</span> において,</p>
+<ul class="simple">
+<li>b = 0 の時, <span class="math">\(a*0 = 0\)</span></li>
+<li>b が偶数の時, <span class="math">\(2a * b/2\)</span></li>
+<li>b が奇数の時, <span class="math">\(a + a * (b - 1)\)</span></li>
+</ul>
+<p>を S 式に置き換える.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">multi</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">b</span> <span class="mi">0</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">even? </span><span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nf">multi</span> <span class="p">(</span><span class="nf">double</span> <span class="nv">a</span><span class="p">)</span> <span class="p">(</span><span class="nf">halve</span> <span class="nv">b</span><span class="p">)))</span>
+        <span class="p">(</span><span class="k">else </span><span class="p">(</span><span class="nb">+ </span><span class="nv">a</span> <span class="p">(</span><span class="nf">multi</span> <span class="nv">a</span> <span class="p">(</span><span class="nb">- </span><span class="nv">b</span> <span class="mi">1</span><span class="p">))))))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>実行コード<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">double</span> <span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">x</span> <span class="nv">x</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">halve</span> <span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">x</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">multi</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">b</span> <span class="mi">0</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">even? </span><span class="nv">b</span><span class="p">)</span> <span class="p">(</span><span class="nf">multi</span> <span class="p">(</span><span class="nf">double</span> <span class="nv">a</span><span class="p">)</span> <span class="p">(</span><span class="nf">halve</span> <span class="nv">b</span><span class="p">)))</span>
+        <span class="p">(</span><span class="k">else </span><span class="p">(</span><span class="nb">+ </span><span class="nv">a</span> <span class="p">(</span><span class="nf">multi</span> <span class="nv">a</span> <span class="p">(</span><span class="nb">- </span><span class="nv">b</span> <span class="mi">1</span><span class="p">))))))</span>
+
+<span class="p">(</span><span class="nf">multi</span> <span class="mi">7</span> <span class="mi">8</span><span class="p">)</span>
+<span class="c1">;; =&gt; 56</span>
+</pre></div>
+</div>
+<p>また, この例であげた (multi 7 8) の計算ステップは以下のようになる.</p>
+<ul class="simple">
+<li>(multi 7 8)</li>
+<li>(multi (double 7) (halve 8))</li>
+<li>(multi (* 7 2) (/ 8 2))</li>
+<li>(multi 14 4)</li>
+<li>(multi (double 14) (halve 4))</li>
+<li>(multi (* 14 2) (/ 4 2))</li>
+<li>(multi 28 2)</li>
+<li>(multi (double 28) (halve 2))</li>
+<li>(multi (* 28 2) (/ 2 2))</li>
+<li>(multi 56 1)</li>
+<li>(+ 56 (multi 56 (- 1 1)))</li>
+<li>(+ 56 (multi 56 0))</li>
+<li>(+ 56 0)</li>
+<li>56</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Exercise 1.17</a><ul>
+<li><a class="reference internal" href="#id1">問</a></li>
+<li><a class="reference internal" href="#id2">解法</a></li>
+<li><a class="reference internal" href="#id3">実行コード</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex1.16.html"
+                        title="previous chapter">Exercise 1.16</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex1.18.html"
+                        title="next chapter">Exercise 1.18</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ex1.18.html" title="Exercise 1.18"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ex1.16.html" title="Exercise 1.16"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

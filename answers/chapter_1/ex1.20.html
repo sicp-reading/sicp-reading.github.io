@@ -1,0 +1,227 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exercise 1.20 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="Exercise 1.21" href="ex1.21.html" />
+    <link rel="prev" title="Exercise 1.19" href="ex1.19.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ex1.21.html" title="Exercise 1.21"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ex1.19.html" title="Exercise 1.19"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exercise-1-20">
+<h1>Exercise 1.20<a class="headerlink" href="#exercise-1-20" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>解法<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>以下の与えられた式を評価した場合の展開式を考えていく.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nb">gcd </span><span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">b</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="nv">a</span>
+        <span class="p">(</span><span class="nb">gcd </span><span class="nv">b</span> <span class="p">(</span><span class="nb">remainder </span><span class="nv">a</span> <span class="nv">b</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nf">print</span> <span class="p">(</span><span class="nb">gcd </span><span class="mi">28</span> <span class="mi">16</span><span class="p">))</span>
+<span class="c1">;; =&gt; 4</span>
+</pre></div>
+</div>
+<div class="section" id="id2">
+<h3>正規順序評価の場合<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>順に評価を見ていく.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="nb">gcd </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="mi">40</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">;; =&gt; #f</span>
+    <span class="mi">206</span>
+    <span class="p">(</span><span class="nb">gcd </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)))</span> <span class="c1">;; =&gt; (1)</span>
+</pre></div>
+</div>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="c1">; (1)</span>
+<span class="c1">; if 文の評価で remainder 使用累計 1 回</span>
+<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">;; =&gt; #f</span>
+    <span class="mi">40</span>
+    <span class="p">(</span><span class="nb">gcd </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">))))</span> <span class="c1">;; =&gt; (2)</span>
+</pre></div>
+</div>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="c1">; (2)</span>
+<span class="c1">; if 文の評価で remainder 使用累計 2 回</span>
+<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">))</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">;; =&gt; #f, (= 4 0)</span>
+    <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">gcd </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">))</span> <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)))))</span> <span class="c1">;; =&gt; (3)</span>
+</pre></div>
+</div>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="c1">; (3)</span>
+<span class="c1">; if 文の評価で remainder 使用累計 4 回</span>
+<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)))</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">;; =&gt; #f, (= 2 0)</span>
+    <span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">))</span>
+    <span class="p">(</span><span class="nb">gcd </span><span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)))</span> <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">))</span> <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">))))))</span> <span class="c1">;; =&gt; (4)</span>
+</pre></div>
+</div>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="c1">; (4)</span>
+<span class="c1">; if 文の評価で remainder 使用累計 7 回</span>
+<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">))</span> <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">))))</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">;; =&gt; #t, (= 0 0)</span>
+    <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)))</span> <span class="c1">;; =&gt; (5)</span>
+    <span class="p">(</span><span class="nb">gcd </span><span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">))</span> <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">))))</span> <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)))</span> <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">))</span> <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)))))))</span>
+</pre></div>
+</div>
+<p>if 文の評価で remainder は 1 + 2 + 4 + 7 = 14 回使用され, 最終的に評価される述部(5) に 4 回使用されるので, 計 18 回となる.</p>
+</div>
+<div class="section" id="id3">
+<h3>作用順序評価の場合<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>順に評価を見ていく.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="c1">; (1)</span>
+<span class="c1">; if 文の評価で remainder 使用累計 1 回</span>
+
+<span class="p">(</span><span class="nb">gcd </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)</span>
+
+<span class="c1">; remainder 使用累計 0 回</span>
+<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="mi">40</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">;; =&gt; #f</span>
+    <span class="mi">206</span>
+    <span class="p">(</span><span class="nb">gcd </span><span class="mi">40</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">206</span> <span class="mi">40</span><span class="p">)))</span>
+
+<span class="c1">; remainder 使用累計 1 回</span>
+<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="mi">6</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">;; =&gt; #f</span>
+    <span class="mi">40</span>
+    <span class="p">(</span><span class="nb">gcd </span><span class="mi">6</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">40</span> <span class="mi">6</span><span class="p">)))</span>
+
+<span class="c1">; remainder 使用累計 2 回</span>
+<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="mi">4</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">;; =&gt; #f</span>
+    <span class="mi">6</span>
+    <span class="p">(</span><span class="nb">gcd </span><span class="mi">4</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">6</span> <span class="mi">4</span><span class="p">)))</span>
+
+<span class="c1">; remainder 使用累計 3 回</span>
+<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="mi">2</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">;; =&gt; #f</span>
+    <span class="mi">4</span>
+    <span class="p">(</span><span class="nb">gcd </span><span class="mi">2</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">4</span> <span class="mi">2</span><span class="p">)))</span>
+
+<span class="c1">; remainder 使用累計 4 回</span>
+<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="mi">0</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">;; =&gt; #t</span>
+    <span class="mi">2</span>
+    <span class="p">(</span><span class="nb">gcd </span><span class="mi">0</span> <span class="p">(</span><span class="nb">remainder </span><span class="mi">2</span> <span class="mi">0</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>計 4 回となる.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Exercise 1.20</a><ul>
+<li><a class="reference internal" href="#id1">解法</a><ul>
+<li><a class="reference internal" href="#id2">正規順序評価の場合</a></li>
+<li><a class="reference internal" href="#id3">作用順序評価の場合</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex1.19.html"
+                        title="previous chapter">Exercise 1.19</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex1.21.html"
+                        title="next chapter">Exercise 1.21</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ex1.21.html" title="Exercise 1.21"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ex1.19.html" title="Exercise 1.19"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

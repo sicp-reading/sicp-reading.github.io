@@ -1,0 +1,204 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1.2.6 例: 素数性のテスト &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="1.3 高階手続きによる抽象" href="1.3.0.html" />
+    <link rel="prev" title="1.2.5 最大公約数" href="1.2.5.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="1.3.0.html" title="1.3 高階手続きによる抽象"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1.2.5.html" title="1.2.5 最大公約数"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>1.2.6 例: 素数性のテスト<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id2">
+<h2><span class="math">\(\Theta(\sqrt{\mathstrut n})\)</span> の素数性テスト<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>ある数が素数かどうかを判定する最も直感的なアルゴリズムは, 割る数を最小数 2 から始めて, 徐々に大きくしていく方法である.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">smallest-divisor</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">find-divisor</span> <span class="nv">n</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">find-divisor</span> <span class="nv">n</span> <span class="nv">test-divisor</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">&gt; </span><span class="p">(</span><span class="nf">square</span> <span class="nv">test-divisor</span><span class="p">)</span> <span class="nv">n</span><span class="p">)</span> <span class="nv">n</span><span class="p">)</span>
+        <span class="p">((</span><span class="nf">divides?</span> <span class="nv">test-divisor</span> <span class="nv">n</span><span class="p">)</span> <span class="nv">test-divisor</span><span class="p">)</span>
+        <span class="p">(</span><span class="k">else </span><span class="p">(</span><span class="nf">find-divisor</span> <span class="nv">n</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">test-divisor</span> <span class="mi">1</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">divides?</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="nb">remainder </span><span class="nv">b</span> <span class="nv">a</span><span class="p">)</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">prime?</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">= </span><span class="nv">n</span> <span class="p">(</span><span class="nf">smallest-divisor</span> <span class="nv">n</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>またこのテストにおいて n が素数かどうかを判定するのに n - 1 の値まで精査する必要はなく, <span class="math">\(\sqrt n\)</span> までの値を調べればよい.
+なぜなら n が d で割れるとするなら <span class="math">\(\frac{n}{d}\)</span> もまた割れて, 両者が <span class="math">\(\sqrt n\)</span> より大きくなることはないからである.
+(例えば 100 の約数を全て書き出して対になるペアの様子をみるとすぐに分かる.)</p>
+<p>よってこのテストで必要な除数は 1 と <span class="math">\(\sqrt n\)</span> の間に収まるので必要なステップ数は <span class="math">\(\Theta(\sqrt{\mathstrut n})\)</span> である.</p>
+</div>
+<div class="section" id="id3">
+<h2><span class="math">\(\Theta(\log n)\)</span> の素数性テスト<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>次に <span class="math">\(\Theta(\log n)\)</span> の素数性テストを考える. これは Fermat の小定理に基づいている.</p>
+<dl class="docutils">
+<dt>Fermat の小定理</dt>
+<dd>n を素数, a を n より小さい正の任意の整数とすると, a の n 乗は n を法として a と合同である
+<span class="math">\(a^n \equiv a (\mod n)\)</span></dd>
+</dl>
+<p>この事実を元に次のようなアルゴリズムを考える. 与えられた数 n に対し, a &lt; n なるランダムな数の n を法とした <span class="math">\(a^n\)</span> の剰余を計算する.
+結果が a でなければ n は <strong>確実に</strong> 素数ではない. (対偶命題) 結果が a なら n が素数である <strong>確率は</strong> 高い.
+更にいろいろな a の値で確かめることで結果の確信度を上げる.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="nf">use</span> <span class="nv">srfi-27</span><span class="p">)</span>
+
+<span class="c1">;; ある数のべき乗を m で割った剰余を求める</span>
+<span class="c1">;; 逐次平方を使うので, ステップ数は対数的に増加する</span>
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">expmod</span> <span class="nv">base</span> <span class="nv">exp</span> <span class="nv">m</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">exp</span> <span class="mi">0</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">even? </span><span class="nv">exp</span><span class="p">)</span>
+         <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nf">square</span> <span class="p">(</span><span class="nf">expmod</span> <span class="nv">base</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">exp</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">m</span><span class="p">))</span>
+                    <span class="nv">m</span><span class="p">))</span>
+        <span class="p">(</span><span class="nf">else</span>
+         <span class="p">(</span><span class="nb">remainder </span><span class="p">(</span><span class="nb">* </span><span class="nv">base</span> <span class="p">(</span><span class="nf">expmod</span> <span class="nv">base</span> <span class="p">(</span><span class="nb">- </span><span class="nv">exp</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">m</span><span class="p">))</span>
+                    <span class="nv">m</span><span class="p">))))</span>
+
+<span class="c1">;; Fermat テストに用いる数 a をランダムに選ぶ手続き</span>
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fermat-test</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">try-it</span> <span class="nv">a</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="nf">expmod</span> <span class="nv">a</span> <span class="nv">n</span> <span class="nv">n</span><span class="p">)</span> <span class="nv">a</span><span class="p">))</span>
+  <span class="p">(</span><span class="nf">try-it</span> <span class="p">(</span><span class="nb">+ </span><span class="mi">1</span> <span class="p">(</span><span class="nf">random-integer</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">)))))</span>
+
+<span class="c1">;; 引数に与えられた回数だけテストを実行する</span>
+<span class="c1">;; 一度でも失敗すると #f を返す</span>
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fast-prime?</span> <span class="nv">n</span> <span class="nv">times</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">times</span> <span class="mi">0</span><span class="p">)</span> <span class="no">#t</span><span class="p">)</span>
+        <span class="p">((</span><span class="nf">fermat-test</span> <span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nf">fast-prime?</span> <span class="nv">n</span> <span class="p">(</span><span class="nb">- </span><span class="nv">times</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="p">(</span><span class="k">else </span><span class="no">#f</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>確率的方法<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>n が Fermat テストに失敗すれば, 対偶命題より n は素数でないと分かる.
+しかし対偶命題は十分条件を与えるのみで, 必要条件ではないので Fermat テストを通過した数 n が素数であることは保証しない.
+実際, a &lt; n なるすべての整数において Fermat テストを通過する数が存在し, それらは <strong>Carmichael 数</strong> と呼ばれる.</p>
+<p>また, エラーの機会を任意に小さくできるテストを確率的アルゴリズムと呼びこの種のアルゴリズムは暗号の世界において飛躍的進歩を遂げた.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1.2.6 例: 素数性のテスト</a><ul>
+<li><a class="reference internal" href="#id2"><span class="math">\(\Theta(\sqrt{\mathstrut n})\)</span> の素数性テスト</a></li>
+<li><a class="reference internal" href="#id3"><span class="math">\(\Theta(\log n)\)</span> の素数性テスト</a></li>
+<li><a class="reference internal" href="#id4">確率的方法</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="1.2.5.html"
+                        title="previous chapter">1.2.5 最大公約数</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="1.3.0.html"
+                        title="next chapter">1.3 高階手続きによる抽象</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="1.3.0.html" title="1.3 高階手続きによる抽象"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1.2.5.html" title="1.2.5 最大公約数"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,294 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exercise 1.19 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="Exercise 1.20" href="ex1.20.html" />
+    <link rel="prev" title="Exercise 1.18" href="ex1.18.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ex1.20.html" title="Exercise 1.20"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ex1.18.html" title="Exercise 1.18"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exercise-1-19">
+<h1>Exercise 1.19<a class="headerlink" href="#exercise-1-19" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>解法<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>a ← a + b, b ← a への変換 T を以下の行列式に置き換えて計算する.</p>
+<div class="math">
+\[\begin{split}\begin{pmatrix}
+a+b\\
+b
+\end{pmatrix}
+= T
+\begin{pmatrix}
+a\\
+b
+\end{pmatrix}\end{split}\]\[\begin{split}\begin{pmatrix}
+a+b\\
+b
+\end{pmatrix}
+=
+\begin{pmatrix}
+1 &amp; 1\\
+1 &amp; 0
+\end{pmatrix}
+\begin{pmatrix}
+a\\
+b
+\end{pmatrix}\end{split}\]\[よって\]\[\begin{split}T =
+\begin{pmatrix}
+1 &amp; 1\\
+1 &amp; 0
+\end{pmatrix}
+A_0 =
+\begin{pmatrix}
+a\\
+b
+\end{pmatrix}\end{split}\]</div>
+<p>上式から <span class="math">\(A_n = T^n A_0\)</span> と導出できる.</p>
+<p>次に, a ← bq + aq + apとb ← bp + aq への変換 T&#8217; を同様に考えて行く.</p>
+<div class="math">
+\[\begin{split}\begin{pmatrix}
+bq + aq + ap\\
+bp + aq
+\end{pmatrix}
+= T_{p,q}
+\begin{pmatrix}
+a\\
+b
+\end{pmatrix}\end{split}\]\[\begin{split}ここで T_{p,q} を
+\begin{pmatrix}
+x &amp; y\\
+z &amp; w
+\end{pmatrix}
+とおくと,\end{split}\]\[\begin{split}\begin{pmatrix}
+bq + aq + ap\\
+bp + aq
+\end{pmatrix}
+=
+\begin{pmatrix}
+x &amp; y\\
+z &amp; w
+\end{pmatrix}
+\begin{pmatrix}
+a\\
+b
+\end{pmatrix}
+=
+\begin{pmatrix}
+xa + yb\\
+za + wb
+\end{pmatrix}\end{split}\]\[展開すると\]\[\begin{split}\begin{cases}
+&amp; bq + aq + ap =  xa + yb\\
+&amp; bp + aq =  za + wb
+\end{cases}\end{split}\]\[2 式から, x = p+q, y = q, z = q, w = p と導出できるので\]\[\begin{split}T_{p,q}
+=
+\begin{pmatrix}
+p+q &amp; q\\
+q &amp; p
+\end{pmatrix}\end{split}\]\[また\]\[\begin{split}A_0
+=
+\begin{pmatrix}
+a\\
+b
+\end{pmatrix}\end{split}\]\[とする.\]</div>
+<p>上式から <span class="math">\(A_n = T_{p,q}^n A_0\)</span> が導出できる.</p>
+<p>これを使って <span class="math">\(T_{p,q}^2\)</span> を展開し, 解が <span class="math">\(T_{p',q'}\)</span> となることを証明する.</p>
+<div class="math">
+\[\begin{split}T_{p,q}^2
+=
+\begin{pmatrix}
+p+q &amp; q\\
+q &amp; p
+\end{pmatrix}
+\begin{pmatrix}
+p+q &amp; q\\
+q &amp; p
+\end{pmatrix}
+=
+\begin{pmatrix}
+(p+q)^2 + q &amp; (p+q)q + pq\\
+(p+q)q + pq &amp; p^2 + q^2
+\end{pmatrix}
+=
+\begin{pmatrix}
+(p^2 + q^2) + (2pq + q^2) &amp; (2pq + q^2)\\
+(2pq + q^2) &amp; (p^2 + q^2)
+\end{pmatrix}\end{split}\]\[ここで, p' = p^2 + q^2, q' = 2pq + q^2 とおくと\]\[\begin{split}T_{p,q}^2
+=
+\begin{pmatrix}
+p' + q' &amp; q'\\
+q' &amp; p'
+\end{pmatrix}\end{split}\]</div>
+<p>よって <span class="math">\(T_{p,q}^2 = T_{p',q'}\)</span> となることが示せた.</p>
+<p>これらを使って命題である (fib-iter a b p q count) を定義する. 問題より,</p>
+<div class="math">
+\[\begin{split}\begin{cases}
+&amp; \text{ n が奇数: }  A_n = (T^{n/2})^2 A_0 \\
+&amp; \text{ n が偶数: }  A_n = T_{p,q} A_{n-1}
+\end{cases}\end{split}\]\[がわかっているのでさらに展開して\]\[n が奇数の時:\]\[\begin{split}\begin{pmatrix}
+a\\
+b\\
+p'\\
+q' \\
+count/2
+\end{pmatrix}
+=
+\begin{pmatrix}
+a\\
+b\\
+p^2 + q^2\\
+2pq + q^2 \\
+count/2
+\end{pmatrix}\end{split}\]\[n が偶数の時:\]\[\begin{split}\begin{pmatrix}
+T_{p,q} A_{n-1} \\
+p\\
+q \\
+count-1
+\end{pmatrix}
+=
+\begin{pmatrix}
+bq + aq + ap\\
+bp + aq\\
+p\\
+q \\
+count-1
+\end{pmatrix}\end{split}\]</div>
+<p>上式を S 式に置き換えたものが解答となる.</p>
+</div>
+<div class="section" id="id2">
+<h2>解答<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">Fib</span> <span class="nv">n</span><span class="p">)</span>
+    <span class="p">(</span><span class="nf">Fib-iter</span> <span class="mi">1</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">1</span> <span class="nv">n</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">Fib-iter</span> <span class="nv">a</span> <span class="nv">b</span> <span class="nv">p</span> <span class="nv">q</span> <span class="nv">count</span><span class="p">)</span>
+    <span class="p">(</span><span class="nf">cond</span>
+        <span class="p">((</span><span class="nb">= </span><span class="nv">count</span> <span class="mi">0</span><span class="p">)</span> <span class="nv">b</span><span class="p">)</span>
+        <span class="p">((</span><span class="nb">even? </span><span class="nv">count</span><span class="p">)</span>
+          <span class="p">(</span><span class="nf">Fib-iter</span> <span class="nv">a</span> <span class="nv">b</span> <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">* </span><span class="nv">p</span> <span class="nv">p</span><span class="p">)</span> <span class="p">(</span><span class="nb">* </span><span class="nv">q</span> <span class="nv">q</span><span class="p">))</span> <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">* </span><span class="mi">2</span> <span class="nv">p</span> <span class="nv">q</span><span class="p">)</span> <span class="p">(</span><span class="nb">* </span><span class="nv">q</span> <span class="nv">q</span><span class="p">))</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">count</span> <span class="mi">2</span><span class="p">)))</span>
+        <span class="p">(</span><span class="nf">else</span>
+          <span class="p">(</span><span class="nf">Fib-iter</span> <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">* </span><span class="nv">b</span> <span class="nv">q</span><span class="p">)</span> <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="nv">q</span><span class="p">)</span> <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="nv">p</span><span class="p">))</span> <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">* </span><span class="nv">b</span> <span class="nv">p</span><span class="p">)</span> <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="nv">q</span><span class="p">))</span> <span class="nv">p</span> <span class="nv">q</span> <span class="p">(</span><span class="nb">- </span><span class="nv">count</span> <span class="mi">1</span><span class="p">)))))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Exercise 1.19</a><ul>
+<li><a class="reference internal" href="#id1">解法</a></li>
+<li><a class="reference internal" href="#id2">解答</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex1.18.html"
+                        title="previous chapter">Exercise 1.18</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex1.20.html"
+                        title="next chapter">Exercise 1.20</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ex1.20.html" title="Exercise 1.20"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ex1.18.html" title="Exercise 1.18"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

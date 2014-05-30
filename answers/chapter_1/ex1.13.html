@@ -1,0 +1,134 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exercise 1.13 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="Exercise 1.15" href="ex1.15.html" />
+    <link rel="prev" title="Exercise 1.12" href="ex1.12.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ex1.15.html" title="Exercise 1.15"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ex1.12.html" title="Exercise 1.12"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exercise-1-13">
+<h1>Exercise 1.13<a class="headerlink" href="#exercise-1-13" title="Permalink to this headline">¶</a></h1>
+<p>証明すべき命題は以下である.</p>
+<div class="math">
+\[Fib(n) は \frac{\phi^n}{\sqrt 5} に最も近い整数である\]</div>
+<p>これを証明するにはまず <span class="math">\(Fib(n) = \frac{\phi^n - \psi^n}{\sqrt 5}\)</span> であることを帰納法とフィボナッチの定義から証明する.</p>
+<div class="math">
+\[Fib(n) = \frac{\phi^n - \psi^n}{\sqrt 5} であることの証明\]\[ただし \phi = \frac{1 + \sqrt 5}{\sqrt 2} であり, \phi^2 = \phi + 1 を満たす. (\psi も同様)\]\[[1]\]\[Fib(0) = 0, Fib(1) = 1 なので n = 0, 1 のとき正しい\]\[[2]\]\[n = k, k + 1 のとき与式が成り立つと仮定すると\]\[Fib(k) = \frac{\phi^k - \psi^k}{\sqrt 5} , Fib(k+1) = \frac{\phi^{k+1} - \psi^{k+1}}{\sqrt 5}\]\[n = k + 2 のとき\]\[Fib の定義より\]\[Fib(k+2) = Fib(k+1) + Fib(k)\]\[         = \frac{\phi^{k+1} - \psi^{k+1}}{\sqrt 5} + \frac{\phi^k - \psi^k}{\sqrt 5}\]\[         = \frac{\phi^k (k+1) - \psi^k (k+1)}{\sqrt 5}\]\[         = \frac{\phi^k \phi^2 - \psi^k \psi^2}{\sqrt 5}\]\[         = \frac{\phi^{k+2} - \psi^{k+2}}{\sqrt 5}\]\[よって [1], [2] より自然数 n について Fib(n) = \frac{\phi^n - \psi^n}{\sqrt 5} であることが証明できた.\]</div>
+<p>これより本題の証明に入る.</p>
+<div class="math">
+\[Fib(n) が \frac{\phi^n}{\sqrt 5} に最も近い整数であることを証明するには\]\[\begin{split}誤差関数 Fib_d(n) = \left| \frac{\phi^n - \psi^n}{\sqrt 5} - \frac{\phi^n}{\sqrt 5} \right| &lt; 0.5 であることが証明できればよい.\end{split}\]\[整理すると\]\[\left| \frac{\phi^n - \psi^n}{\sqrt 5} - \frac{\phi^n}{\sqrt 5} \right|\]\[= \left| - \frac{\psi^n}{\sqrt 5} \right|\]\[= \left| \frac{\psi^n}{\sqrt 5} \right|\]\[ここで n = 1 のとき,\]\[\begin{split}Fib_d(1) = \left| \frac{\psi^1}{\sqrt 5} \right| = 0.27639 ... &lt; 0.5\end{split}\]\[であり, さらに\]\[\begin{split}\left| \psi \right| &lt; 1 なので誤差関数 Fib_d(n) は減少関数となる.\end{split}\]\[以上により題意は証明された.\]</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex1.12.html"
+                        title="previous chapter">Exercise 1.12</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex1.15.html"
+                        title="next chapter">Exercise 1.15</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ex1.15.html" title="Exercise 1.15"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ex1.12.html" title="Exercise 1.12"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

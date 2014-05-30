@@ -1,0 +1,178 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exercise 1.23 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="Exercise 1.27" href="ex1.27.html" />
+    <link rel="prev" title="Exercise 1.22" href="ex1.22.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ex1.27.html" title="Exercise 1.27"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ex1.22.html" title="Exercise 1.22"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exercise-1-23">
+<h1>Exercise 1.23<a class="headerlink" href="#exercise-1-23" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="nf">use</span> <span class="nv">srfi-19</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">smallest-divisor</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">find-divisor</span> <span class="nv">n</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">square</span> <span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">* </span><span class="nv">x</span> <span class="nv">x</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">find-divisor</span> <span class="nv">n</span> <span class="nv">test-divisor</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">&gt; </span><span class="p">(</span><span class="nf">square</span> <span class="nv">test-divisor</span><span class="p">)</span> <span class="nv">n</span><span class="p">)</span> <span class="nv">n</span><span class="p">)</span>
+        <span class="p">((</span><span class="nf">divides?</span> <span class="nv">test-divisor</span> <span class="nv">n</span><span class="p">)</span> <span class="nv">test-divisor</span><span class="p">)</span>
+        <span class="p">(</span><span class="k">else </span><span class="p">(</span><span class="nf">find-divisor</span> <span class="nv">n</span> <span class="p">(</span><span class="nf">next</span> <span class="nv">test-divisor</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">divides?</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="nb">remainder </span><span class="nv">b</span> <span class="nv">a</span><span class="p">)</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">prime?</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">= </span><span class="nv">n</span> <span class="p">(</span><span class="nf">smallest-divisor</span> <span class="nv">n</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">next</span> <span class="nv">test-divisor</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">test-divisor</span> <span class="mi">2</span><span class="p">)</span>
+      <span class="mi">3</span>
+      <span class="p">(</span><span class="nb">+ </span><span class="nv">test-divisor</span> <span class="mi">2</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">timed-prime-test</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">newline</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">start-prime-test</span> <span class="nv">n</span> <span class="p">(</span><span class="nf">current-time</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">start-prime-test</span> <span class="nv">n</span> <span class="nv">start-time</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">and </span><span class="p">(</span><span class="nf">prime?</span> <span class="nv">n</span><span class="p">)</span>
+       <span class="p">(</span><span class="nf">report-prime</span> <span class="p">(</span><span class="nf">time-difference</span> <span class="p">(</span><span class="nf">current-time</span><span class="p">)</span> <span class="nv">start-time</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">report-prime</span> <span class="nv">elapsed-time</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="s">&quot; *** &quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">display </span><span class="nv">elapsed-time</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">search-for-primes</span> <span class="nv">from</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">0</span><span class="p">)</span> <span class="p">(</span><span class="nf">newline</span><span class="p">))</span>
+        <span class="p">((</span><span class="nb">even? </span><span class="nv">from</span><span class="p">)</span> <span class="p">(</span><span class="nf">search-for-primes</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">from</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">n</span><span class="p">))</span>
+        <span class="p">((</span><span class="nf">timed-prime-test</span> <span class="nv">from</span><span class="p">)</span> <span class="p">(</span><span class="nf">search-for-primes</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">from</span> <span class="mi">2</span><span class="p">)</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="p">(</span><span class="k">else </span><span class="p">(</span><span class="nf">search-for-primes</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">from</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">n</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">search</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">search-for-primes</span> <span class="nv">n</span> <span class="mi">3</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">search</span> <span class="mi">1000</span><span class="p">)</span>     <span class="c1">;; =&gt; *** #&lt;time-duration 0.000015000&gt;</span>
+<span class="p">(</span><span class="nf">search</span> <span class="mi">10000</span><span class="p">)</span>    <span class="c1">;; =&gt; *** #&lt;time-duration 0.000035000&gt;</span>
+<span class="p">(</span><span class="nf">search</span> <span class="mi">100000</span><span class="p">)</span>   <span class="c1">;; =&gt; *** #&lt;time-duration 0.000209000&gt;</span>
+<span class="p">(</span><span class="nf">search</span> <span class="mi">1000000</span><span class="p">)</span>  <span class="c1">;; =&gt; *** #&lt;time-duration 0.000410000&gt;</span>
+</pre></div>
+</div>
+<p>アルゴリズムの速度比は <span class="math">\(\frac{1}{2}\)</span> になっていない
+これは (next test-divisor) の定義の部分で, 毎回 test-divisor が 2 かどうか評価されてしまうためである.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex1.22.html"
+                        title="previous chapter">Exercise 1.22</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex1.27.html"
+                        title="next chapter">Exercise 1.27</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ex1.27.html" title="Exercise 1.27"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ex1.22.html" title="Exercise 1.22"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

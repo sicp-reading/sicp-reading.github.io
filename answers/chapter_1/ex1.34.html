@@ -1,0 +1,158 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exercise 1.34 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="Exercise 1.35" href="ex1.35.html" />
+    <link rel="prev" title="Exercise 1.27" href="ex1.27.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ex1.35.html" title="Exercise 1.35"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ex1.27.html" title="Exercise 1.27"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exercise-1-34">
+<h1>Exercise 1.34<a class="headerlink" href="#exercise-1-34" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>解答<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>以下の手続き f を定義する.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">f</span> <span class="nv">g</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">g</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">print</span> <span class="p">(</span><span class="nf">f</span> <span class="nv">square</span><span class="p">))</span>
+<span class="c1">;; =&gt; 4</span>
+
+<span class="p">(</span><span class="nf">print</span> <span class="p">(</span><span class="nf">f</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">z</span><span class="p">)</span> <span class="p">(</span><span class="nb">* </span><span class="nv">z</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">z</span> <span class="mi">1</span><span class="p">)))))</span>
+<span class="c1">;; =&gt; 6</span>
+</pre></div>
+</div>
+<p>ここで (f f) の振る舞いを考える.</p>
+<div class="highlight-sh"><div class="highlight"><pre>gosh&gt; <span class="o">(</span>f f<span class="o">)</span>
+*** ERROR: invalid application: <span class="o">(</span>2 2<span class="o">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>(f f)</li>
+<li>((lambda (g) (g 2)) (lambda (g) (g 2)))</li>
+<li>(2 2)</li>
+</ul>
+<p>処理系は (2 2) を評価することができず計算は終了する.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Exercise 1.34</a><ul>
+<li><a class="reference internal" href="#id1">解答</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex1.27.html"
+                        title="previous chapter">Exercise 1.27</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex1.35.html"
+                        title="next chapter">Exercise 1.35</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ex1.35.html" title="Exercise 1.35"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ex1.27.html" title="Exercise 1.27"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

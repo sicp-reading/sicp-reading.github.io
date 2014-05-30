@@ -1,0 +1,246 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1.3.3 一般的方法としての手続き &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="Exercise 1.1" href="../../answers/chapter_1/ex1.01.html" />
+    <link rel="prev" title="1.3.2 lambdaを使う手続きの構築" href="1.3.2.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../answers/chapter_1/ex1.01.html" title="Exercise 1.1"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1.3.2.html" title="1.3.2 lambdaを使う手続きの構築"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>1.3.3 一般的方法としての手続き<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id2">
+<h2>本節の目的<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>下記の 2 つの例を用いながら更に強力な抽象化の手法を学ぶ.</p>
+<ul class="simple">
+<li>区間二分法による方程式の零点の探索</li>
+<li>関数の不動点の探索</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>区間二分法による方程式の零点の探索<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>区間二分法(Half-Interval Method) とは連続関数 f に対して <span class="math">\(f(x) = 0\)</span> の根を探す場合に有用な手法のひとつである.</p>
+<p>2 点 a, b が <span class="math">\(f(a) &lt; 0 &lt; f(b)\)</span> を満たす時, f は a と b との間に少なくとも 1 つの零点を持つ.</p>
+<img alt="../../_images/half-interval-method.png" src="../../_images/half-interval-method.png" />
+<p>まず <span class="math">\(f(a) &lt; 0\)</span>, <span class="math">\(0 &lt; f(b)\)</span> を満たす a, b を用意する.
+二分法を繰り返し, ある許容誤差(T) より小さい時解とする.</p>
+<p>図で示すように, このアルゴリズムのステップ数は,</p>
+<p>解となる n 回目において, <span class="math">\(\frac{L}{2^n} = T\)</span> が成り立つとすると, <span class="math">\(n = log \frac{L}{T}\)</span> となり, ステップ数は a と b の差である L と許容誤差 T に依存することが分かる.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">search</span> <span class="nv">f</span> <span class="nv">neg-point</span> <span class="nv">pos-point</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">midpoint</span> <span class="p">(</span><span class="nf">average</span> <span class="nv">neg-point</span> <span class="nv">pos-point</span><span class="p">)))</span>
+    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">close-enough?</span> <span class="nv">neg-point</span> <span class="nv">pos-point</span><span class="p">)</span>
+        <span class="nv">midpoint</span>
+        <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">test-value</span> <span class="p">(</span><span class="nf">f</span> <span class="nv">midpoint</span><span class="p">)))</span>
+          <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">positive? </span><span class="nv">test-value</span><span class="p">)</span>
+                 <span class="p">(</span><span class="nf">search</span> <span class="nv">f</span> <span class="nv">neg-point</span> <span class="nv">midpoint</span><span class="p">))</span>
+                <span class="p">((</span><span class="nb">negative? </span><span class="nv">test-value</span><span class="p">)</span>
+                 <span class="p">(</span><span class="nf">search</span> <span class="nv">f</span> <span class="nv">midpoint</span> <span class="nv">pos-point</span><span class="p">))</span>
+                <span class="p">(</span><span class="k">else </span><span class="nv">midpoint</span><span class="p">))))))</span>
+</pre></div>
+</div>
+<p>search 手続きは, 引数に探索対象の関数 f と, a, b に相当する neg-point, pos-point を引数に受け取り, 解を返す.</p>
+</div>
+<div class="section" id="id4">
+<h2>関数の不動点の探索<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>ある x において <span class="math">\(f(x) = x\)</span> を満たす時, x は f の不動点(Fixed-Point)と呼ぶ.
+不動点の探索は, ある予測値をまず設定し, f を繰り返し作用させ値がある許容誤差以内になった値を解とする.</p>
+<img alt="../../_images/fixed-point.png" src="../../_images/fixed-point.png" />
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fixed-point</span> <span class="nv">f</span> <span class="nv">first-guess</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">close-enough?</span> <span class="nv">v1</span> <span class="nv">v2</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">abs </span><span class="p">(</span><span class="nb">- </span><span class="nv">v1</span> <span class="nv">v2</span><span class="p">))</span> <span class="nv">tolerance</span><span class="p">))</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">try</span> <span class="nv">guess</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">next</span> <span class="p">(</span><span class="nf">f</span> <span class="nv">guess</span><span class="p">)))</span>
+      <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">close-enough?</span> <span class="nv">guess</span> <span class="nv">next</span><span class="p">)</span>
+          <span class="nv">next</span>
+          <span class="p">(</span><span class="nf">try</span> <span class="nv">next</span><span class="p">))))</span>
+  <span class="p">(</span><span class="nf">try</span> <span class="nv">first-guess</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>fixed-point 手続きは, 引数に探索対象の関数 f と初期の予測値を引数に受け取り解を返す.</p>
+<p>これを用いて, 例えば <span class="math">\(cos(x) = x\)</span> となる x の値を <cite>(fixed-point cos 1.0)</cite> を計算することで求められる.</p>
+<div class="section" id="id5">
+<h3>不動点探索には平均緩和法が有用である<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>ここで, ある実数 a における平方根 <span class="math">\(\sqrt{a}\)</span> を考えよう. <span class="math">\(\sqrt{a}\)</span> とは, <span class="math">\(y^2 = a\)</span> を満たす y の値を探すことと同意である.</p>
+<p>即ち,</p>
+<div class="line-block">
+<div class="line"><span class="math">\(y^2 = a\)</span></div>
+<div class="line"><span class="math">\(y = \frac{a}{y}\)</span></div>
+<div class="line">このとき</div>
+<div class="line">y は <span class="math">\(y \mapsto \frac{a}{y}\)</span> の不動点を探索する, と言う.</div>
+<div class="line"><br /></div>
+</div>
+<p>sqrt は以下のように定義でき, 手続きを追ってみる.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nb">sqrt </span><span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">fixed-point</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">y</span><span class="p">)</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">x</span> <span class="nv">y</span><span class="p">))</span>
+               <span class="mf">1.0</span><span class="p">))</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>(fixed-point (lambda (y) (/ x y)) 1.0))</li>
+<li>(try 1.0)</li>
+<li>(f 1.0) ;; =&gt; (lambda (y) (/ x y))</li>
+<li>(try 1.0)</li>
+<li>(f 1.0) ;; =&gt; (lambda (y) (/ x y))</li>
+</ul>
+<p>無限ループになり解を導出できない.</p>
+<p>この解決策として <strong>平均緩和法(Average Damping)</strong> がある.
+平均緩和法は予測値の大きな変化を防ぐことで, 解への逐次近似値を平均化する方法で,
+不動点探索で収束を助ける有用な方法のひとつである.</p>
+<div class="line-block">
+<div class="line"><span class="math">\(y^2 = a\)</span></div>
+<div class="line"><span class="math">\(y = \frac{a}{y}\)</span></div>
+<div class="line"><span class="math">\(y + y = \frac{a}{y} + y\)</span></div>
+<div class="line"><span class="math">\(2y = \frac{a}{y} + y\)</span></div>
+<div class="line"><span class="math">\(y = \frac{1}{2}(\frac{a}{y} + y)\)</span></div>
+<div class="line">即ち</div>
+<div class="line"><span class="math">\(y \mapsto \frac{1}{2}(\frac{a}{y} + y)\)</span></div>
+<div class="line"><br /></div>
+</div>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nb">sqrt </span><span class="nv">x</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">fixed-point</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">y</span><span class="p">)</span> <span class="p">(</span><span class="nf">average</span> <span class="nv">y</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">x</span> <span class="nv">y</span><span class="p">)))</span>
+               <span class="mf">1.0</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>この手続きを追って見る.</p>
+<ul class="simple">
+<li>(fixed-point (lambda (y) (average y (/ x y))) 1.0)</li>
+<li>(try 1.0)</li>
+<li>(avarage 1 (/ x 1))</li>
+<li>(try (avarage 1 (/ x 1)))</li>
+<li>(average (avarage 1 (/ x 1)) (/ x (avarage 1 (/ x 1))))</li>
+</ul>
+<p>次の予測値を <span class="math">\(f(x) = x\)</span> を満たす x でなく, 予測値と <span class="math">\(f(x) = x\)</span> の平均値にすることで無限ループを防いだ.</p>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>まとめ<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p>上の 2 つの例を用いながら, ある関数に対して目的の解を計算する為に, 引数として手続きが渡せる高階手続きを用いることで, 更に抽象度を上げプログラムの表現力を広げられることを示した.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1.3.3 一般的方法としての手続き</a><ul>
+<li><a class="reference internal" href="#id2">本節の目的</a></li>
+<li><a class="reference internal" href="#id3">区間二分法による方程式の零点の探索</a></li>
+<li><a class="reference internal" href="#id4">関数の不動点の探索</a><ul>
+<li><a class="reference internal" href="#id5">不動点探索には平均緩和法が有用である</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id6">まとめ</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="1.3.2.html"
+                        title="previous chapter">1.3.2 lambdaを使う手続きの構築</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../../answers/chapter_1/ex1.01.html"
+                        title="next chapter">Exercise 1.1</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../answers/chapter_1/ex1.01.html" title="Exercise 1.1"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1.3.2.html" title="1.3.2 lambdaを使う手続きの構築"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

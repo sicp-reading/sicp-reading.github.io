@@ -1,0 +1,194 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1.2.1 線形再帰と反復 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="1.2.2 木構造再帰" href="1.2.2.html" />
+    <link rel="prev" title="1.2 手続きとその生成するプロセス" href="1.2.0.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="1.2.2.html" title="1.2.2 木構造再帰"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1.2.0.html" title="1.2 手続きとその生成するプロセス"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>1.2.1 線形再帰と反復<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre>n! = n・(n-1)・(n-2)・・・3・2・1
+</pre></div>
+</div>
+<p>で定義される階乗関数を考える.</p>
+<div class="section" id="id2">
+<h2>再帰的プロセス<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">factorial</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="nv">n</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="mi">1</span>
+      <span class="p">(</span><span class="nb">* </span><span class="nv">n</span> <span class="p">(</span><span class="nf">factorial</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span> <span class="mi">1</span><span class="p">)))))</span>
+</pre></div>
+</div>
+<p>上記の手続き factorial は, 置き換えモデルによって以下のような膨張と, それに続く収縮の形をとる.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="nf">factorial</span> <span class="mi">6</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">* </span><span class="mi">6</span> <span class="p">(</span><span class="nf">factorial</span> <span class="mi">5</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">* </span><span class="mi">6</span> <span class="p">(</span><span class="nb">* </span><span class="mi">5</span> <span class="p">(</span><span class="nf">factorial</span> <span class="mi">4</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb">* </span><span class="mi">6</span> <span class="p">(</span><span class="nb">* </span><span class="mi">5</span> <span class="p">(</span><span class="nb">* </span><span class="mi">4</span> <span class="p">(</span><span class="nf">factorial</span> <span class="mi">3</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb">* </span><span class="mi">6</span> <span class="p">(</span><span class="nb">* </span><span class="mi">5</span> <span class="p">(</span><span class="nb">* </span><span class="mi">4</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="p">(</span><span class="nf">factorial</span> <span class="mi">2</span><span class="p">)))))</span>
+<span class="p">(</span><span class="nb">* </span><span class="mi">6</span> <span class="p">(</span><span class="nb">* </span><span class="mi">5</span> <span class="p">(</span><span class="nb">* </span><span class="mi">4</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="p">(</span><span class="nb">* </span><span class="mi">2</span> <span class="p">(</span><span class="nf">factorial</span> <span class="mi">1</span><span class="p">))))))</span>
+<span class="p">(</span><span class="nb">* </span><span class="mi">6</span> <span class="p">(</span><span class="nb">* </span><span class="mi">5</span> <span class="p">(</span><span class="nb">* </span><span class="mi">4</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="p">(</span><span class="nb">* </span><span class="mi">2</span> <span class="mi">1</span><span class="p">)))))</span>
+<span class="p">(</span><span class="nb">* </span><span class="mi">6</span> <span class="p">(</span><span class="nb">* </span><span class="mi">5</span> <span class="p">(</span><span class="nb">* </span><span class="mi">4</span> <span class="p">(</span><span class="nb">* </span><span class="mi">3</span> <span class="mi">1</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb">* </span><span class="mi">6</span> <span class="p">(</span><span class="nb">* </span><span class="mi">5</span> <span class="p">(</span><span class="nb">* </span><span class="mi">4</span> <span class="mi">6</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb">* </span><span class="mi">6</span> <span class="p">(</span><span class="nb">* </span><span class="mi">5</span> <span class="mi">24</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">* </span><span class="mi">6</span> <span class="mi">120</span><span class="p">)</span>
+<span class="mi">720</span>
+</pre></div>
+</div>
+<p>膨張は <strong>遅延演算</strong> の列を作るときに起きている. 再帰的プロセスの実行では,処理系が後に実行する演算を記憶しておく必要がある. 遅延演算の列の長さが n に比例して成長するため, このようなプロセスを特に <strong>線形再帰的プロセス</strong> という.</p>
+</div>
+<div class="section" id="id3">
+<h2>反復的プロセス<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">factorial</span> <span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">fact-iter</span> <span class="mi">1</span> <span class="mi">1</span> <span class="nv">n</span><span class="p">))</span>
+<span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">fact-iter</span> <span class="nv">product</span> <span class="nv">counter</span> <span class="nv">max-count</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">counter</span> <span class="nv">max-count</span><span class="p">)</span>
+      <span class="nv">product</span>
+      <span class="p">(</span><span class="nf">fact-iter</span> <span class="p">(</span><span class="nb">* </span><span class="nv">counter</span> <span class="nv">product</span><span class="p">)</span>
+                 <span class="p">(</span><span class="nb">+ </span><span class="nv">counter</span> <span class="mi">1</span><span class="p">)</span>
+                 <span class="nv">max-count</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>反復的プロセスとして定義した関数 factorial は, 再帰的プロセスで定義した factorial 関数のように伸び縮みしない形をとる.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="nf">factorial</span> <span class="mi">6</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">fact-iter</span>   <span class="mi">1</span> <span class="mi">1</span> <span class="mi">6</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">fact-iter</span>   <span class="mi">1</span> <span class="mi">2</span> <span class="mi">6</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">fact-iter</span>   <span class="mi">2</span> <span class="mi">3</span> <span class="mi">6</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">fact-iter</span>   <span class="mi">6</span> <span class="mi">4</span> <span class="mi">6</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">fact-iter</span>  <span class="mi">24</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">fact-iter</span> <span class="mi">120</span> <span class="mi">6</span> <span class="mi">6</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">fact-iter</span> <span class="mi">720</span> <span class="mi">7</span> <span class="mi">6</span><span class="p">)</span>
+<span class="mi">720</span>
+</pre></div>
+</div>
+<p>反復的プロセスの状態は, その状態が一定個数の <strong>状態変数</strong> と, 状態が移った時, 状態変数をどう更新するかの一定した規則と, プロセスを停止させる条件を規定する終了テストで総括される. 必要なステップ数が n に比例して成長するのるため, このようなプロセスを特に <strong>線形反復的プロセス</strong> という.</p>
+</div>
+<div class="section" id="id4">
+<h2>再帰的手続き<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>手続きの定義がその手続き自身を指す構文上の事実. プロセスが再帰的, 反復的のいずれにしても構文上再帰的な手続きであれば, それは再帰的手続きである.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1.2.1 線形再帰と反復</a><ul>
+<li><a class="reference internal" href="#id2">再帰的プロセス</a></li>
+<li><a class="reference internal" href="#id3">反復的プロセス</a></li>
+<li><a class="reference internal" href="#id4">再帰的手続き</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="1.2.0.html"
+                        title="previous chapter">1.2 手続きとその生成するプロセス</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="1.2.2.html"
+                        title="next chapter">1.2.2 木構造再帰</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="1.2.2.html" title="1.2.2 木構造再帰"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1.2.0.html" title="1.2 手続きとその生成するプロセス"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

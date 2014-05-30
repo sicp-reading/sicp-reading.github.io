@@ -1,0 +1,187 @@
+
+<!DOCTYPE>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1.3.2 lambdaを使う手続きの構築 &mdash; sicp-reading 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js?config=default"></script>
+    <link rel="shortcut icon" href="../../_static/sicp.ico"/>
+    <link rel="top" title="sicp-reading 0.0.1 documentation" href="../../index.html" />
+    <link rel="next" title="1.3.3 一般的方法としての手続き" href="1.3.3.html" />
+    <link rel="prev" title="1.3.1 引数としての手続き" href="1.3.1.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">  
+<script type="text/javascript">
+$(function(){ 
+    $('.document').addClass('container');
+    $('.footer').addClass('container');
+    $('.related').eq(0).addClass('navbar navbar-default'); 
+    $('.related').eq(0).find('ul').addClass('container');
+    $('.related').eq(1).hide(); 
+    $('form input[type=text]').addClass('form-control');
+    $('form input[type=submit]').addClass('btn btn-primary');
+}); 
+</script> 
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="1.3.3.html" title="1.3.3 一般的方法としての手続き"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1.3.1.html" title="1.3.1 引数としての手続き"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="lambda">
+<h1>1.3.2 lambdaを使う手続きの構築<a class="headerlink" href="#lambda" title="Permalink to this headline">¶</a></h1>
+<p>本節では lambda 式と let 式を学ぶ. どちらも特殊形式の構文である.</p>
+<div class="section" id="lambda-lambda-parameters-body">
+<h2>lambda 式 (lambda (&lt;parameters&gt;) &lt;body&gt;)<a class="headerlink" href="#lambda-lambda-parameters-body" title="Permalink to this headline">¶</a></h2>
+<p>一般的に手続きに名前がつかない他は define と同様に手続きを作り出すのに使う.</p>
+<p>この lambda 式は手続きへと評価される.
+lambda 式が評価される時に有効な環境は, その手続きの一部として保存される. 後からこの手続きを実引数と共に呼び出すと, lambda 式が評価された時の環境が仮引数の各変数を新しい場所へと束縛することによって拡張され, 対応する実引数値がそれらの場所に格納される.
+そしてlambda 式の本体の各式がその環境の中で逐次的に評価される.
+そして, 最後の式の結果がその手続きの結果として返される.</p>
+</div>
+<div class="section" id="let-let-var1-exp1-var2-exp2-body">
+<h2>let 式 (let ((var1 exp1) (var2 exp2 ...)) &lt;body&gt;)<a class="headerlink" href="#let-let-var1-exp1-var2-exp2-body" title="Permalink to this headline">¶</a></h2>
+<p>let 式は仮引数として束縛されたもの以外にも手続きに局所的な変数を使いたい場合使える. let 式は lambda 作用の構文糖衣である. let 式で指定された変数の有効範囲(以下, 環境と呼ぶ)は let の本体になる.</p>
+<p>let 式はまず束縛部の各初期値が全て評価され, 変数が束縛される. 変数はその結果を保持する新しい環境へ束縛されており, その環境の中で &lt;本体&gt; が評価される.</p>
+</div>
+<div class="section" id="lambda-let">
+<h2>lambda 式と let 式を使った例<a class="headerlink" href="#lambda-let" title="Permalink to this headline">¶</a></h2>
+<p>関数 <span class="math">\(f(x, y) = x(1 + xy)^2 + y(1 - y) + (1 + xy)(1 - y)\)</span> を計算する場合を考える.</p>
+<div class="line-block">
+<div class="line"><span class="math">\(a = 1 + xy\)</span></div>
+<div class="line"><span class="math">\(b = 1 - y\)</span></div>
+</div>
+<p>と置き換えると, <span class="math">\(f(x, y) = xa^2 + yb + ab\)</span> と書ける.
+これを計算したい場合以下のように定義できる.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">f</span> <span class="nv">x</span> <span class="nv">y</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">f-helper</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">* </span><span class="nv">x</span> <span class="p">(</span><span class="nf">square</span> <span class="nv">a</span><span class="p">))</span>
+       <span class="p">(</span><span class="nb">* </span><span class="nv">y</span> <span class="nv">b</span><span class="p">)</span>
+       <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="nv">b</span><span class="p">)))</span>
+  <span class="p">(</span><span class="nf">f-helper</span> <span class="p">(</span><span class="nb">+ </span><span class="mi">1</span> <span class="p">(</span><span class="nb">* </span><span class="nv">x</span> <span class="nv">y</span><span class="p">))</span>
+            <span class="p">(</span><span class="nb">- </span><span class="mi">1</span> <span class="nv">y</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>これを a, b という局所変数を lambda 式を使って定義すると以下のように置き換えられる.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">f</span> <span class="nv">x</span> <span class="nv">y</span><span class="p">)</span>
+  <span class="p">((</span><span class="k">lambda </span><span class="p">(</span><span class="nf">a</span> <span class="nv">b</span><span class="p">)</span>
+     <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">* </span><span class="nv">x</span> <span class="p">(</span><span class="nf">square</span> <span class="nv">a</span><span class="p">))</span>
+        <span class="p">(</span><span class="nb">* </span><span class="nv">y</span> <span class="nv">b</span><span class="p">)</span>
+        <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="nv">b</span><span class="p">)))</span>
+   <span class="p">(</span><span class="nb">+ </span><span class="mi">1</span> <span class="p">(</span><span class="nb">* </span><span class="nv">x</span> <span class="nv">y</span><span class="p">))</span>
+   <span class="p">(</span><span class="nb">- </span><span class="mi">1</span> <span class="nv">y</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>また, let 式を使うことで更に抽象化できる.</p>
+<div class="highlight-scheme"><div class="highlight"><pre><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">f</span> <span class="nv">x</span> <span class="nv">y</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">a</span> <span class="p">(</span><span class="nb">+ </span><span class="mi">1</span> <span class="p">(</span><span class="nb">* </span><span class="nv">x</span> <span class="nv">y</span><span class="p">)))</span>
+        <span class="p">(</span><span class="nf">b</span> <span class="p">(</span><span class="nb">- </span><span class="mi">1</span> <span class="nv">y</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">* </span><span class="nv">x</span> <span class="p">(</span><span class="nf">square</span> <span class="nv">a</span><span class="p">))</span>
+       <span class="p">(</span><span class="nb">* </span><span class="nv">y</span> <span class="nv">b</span><span class="p">)</span>
+       <span class="p">(</span><span class="nb">* </span><span class="nv">a</span> <span class="nv">b</span><span class="p">))))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1.3.2 lambdaを使う手続きの構築</a><ul>
+<li><a class="reference internal" href="#lambda-lambda-parameters-body">lambda 式 (lambda (&lt;parameters&gt;) &lt;body&gt;)</a></li>
+<li><a class="reference internal" href="#let-let-var1-exp1-var2-exp2-body">let 式 (let ((var1 exp1) (var2 exp2 ...)) &lt;body&gt;)</a></li>
+<li><a class="reference internal" href="#lambda-let">lambda 式と let 式を使った例</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="1.3.1.html"
+                        title="previous chapter">1.3.1 引数としての手続き</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="1.3.3.html"
+                        title="next chapter">1.3.3 一般的方法としての手続き</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="1.3.3.html" title="1.3.3 一般的方法としての手続き"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1.3.1.html" title="1.3.1 引数としての手続き"
+             >previous</a> |</li>
+        <li><a href="../../index.html">sicp-reading 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, sicp-reading.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
