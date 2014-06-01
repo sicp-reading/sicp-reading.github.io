@@ -71,11 +71,19 @@ $(function(){
             
   <div class="section" id="exercise-1-37">
 <h1>Exercise 1.37<a class="headerlink" href="#exercise-1-37" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">文責:</th><td class="field-body">&#64;naoiwata</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="id1">
+<h2>解答<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>無限の連分数の一般項は 第 k 項において以下のように表せる.</p>
 <p><span class="math">\(f(N_{i}, D_{i}) = \frac{N_i}{D_{i} + f(N_{i+1}, D_{i+1})}\)</span></p>
 <p>これを再帰的プロセスまたは反復的プロセスを使って S 式に書き換えたものが解となる.</p>
-<div class="section" id="id1">
-<h2>解答<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-scheme"><div class="highlight"><pre><span class="c1">;; 再帰的プロセス</span>
 <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">cont-franc</span> <span class="nv">n</span> <span class="nv">d</span> <span class="nv">k</span><span class="p">)</span>
   <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">cont-franc-iter</span> <span class="nv">i</span><span class="p">)</span>
